@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from moviesreviews.initcmds import erase_db, init_db
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+
+erase_db()
+init_db()
