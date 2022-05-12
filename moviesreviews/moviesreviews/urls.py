@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from moviesreviews.initcmds import erase_db, init_db
+from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='home')
 ]
 
 erase_db()
