@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% load static %}
+    <h3>{{ object.release_year }}</h3>
+    <h1>{{ object.title }}</h1>
+    <img src="{% static object.cover_path %}"/>
+{% endblock content %}

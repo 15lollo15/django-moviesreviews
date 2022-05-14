@@ -1,6 +1,6 @@
 from movies.models import Genre, Movie, Person
 from users.models import Review, UserProfile, Watch, Comment
-from .settings import STATIC_URL
+#from .settings import STATIC_URL
 from django.contrib.auth.models import User
 
 genres = ['giallo', 'horror', 'fantasy', 'animazione']
@@ -47,7 +47,7 @@ def init_movies():
     movie1.release_year = 2019
     movie1.title = 'Cena con delitto'
     movie1.plot = 'Un investigatore e un soldato si recano in una lussureggiante tenuta per interrogare gli eccentrici parenti di un patriarca morto durante le celebrazioni del suo ottantacinquesimo compleanno.'
-    movie1.cover_path = STATIC_URL + "imgs/movies_covers/0.jpg"
+    movie1.cover_path = "imgs/movies_covers/0.jpg"
     movie1.save()
     movie1.genre.set([Genre.objects.filter(name='giallo').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Rian Johnson').first()])
@@ -58,7 +58,7 @@ def init_movies():
     movie1.release_year = 1979
     movie1.title = 'Halloween'
     movie1.plot = "Un criminale già condannato per l'omicidio della sorella scappa di prigione e torna nella città natale in cerca della prossima vittima durante la notte di Halloween del 1978."
-    movie1.cover_path = STATIC_URL + "imgs/movies_covers/1.jpg"
+    movie1.cover_path =  "imgs/movies_covers/1.jpg"
     movie1.save()
     movie1.genre.set([Genre.objects.filter(name='horror').first()])
     movie1.directors.set([Person.objects.filter(name_surname='John Carpenter').first()])
@@ -69,7 +69,7 @@ def init_movies():
     movie1.release_year = 2019
     movie1.title = "Il signore degli anelli: La compagnia dell'anello"
     movie1.plot = "Un giovane hobbit e un variegato gruppo, composto da umani, un nano, un elfo e altri hobbit, partono per un delicata missione, guidati dal potente mago Gandalf. Devono distruggere un anello magico e sconfiggere il malvagio Sauron."
-    movie1.cover_path = STATIC_URL + "imgs/movies_covers/2.jpg"
+    movie1.cover_path = "imgs/movies_covers/2.jpg"
     movie1.save()
     movie1.genre.set([Genre.objects.filter(name='giallo').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Peter Jackson').first()])
@@ -80,7 +80,7 @@ def init_movies():
     movie1.release_year = 2012
     movie1.title = "Le 5 leggende"
     movie1.plot = "La storia di un gruppo di eroi ben noti ai bambini, tra i quali Babbo Natale, il Coniglio Pasquale e la Fatina dei Denti, ognuno dotato di poteri straordinari, che devono unire le loro forze per proteggere le speranze dei bambini di tutto il mondo."
-    movie1.cover_path = STATIC_URL + "imgs/movies_covers/4.jpg"
+    movie1.cover_path = "imgs/movies_covers/4.jpg"
     movie1.save()
     movie1.genre.set([Genre.objects.filter(name='animazione').first(), Genre.objects.filter(name='fantasy').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Peter Ramsey').first()])
