@@ -38,8 +38,8 @@ def init_movies():
 
     for a in actors:
         actor = Person()
-        actor.birthday = d[0]
-        actor.name_surname = d[1]
+        actor.birthday = a[0]
+        actor.name_surname = a[1]
         actor.save()
 
     movie1 = Movie()
@@ -52,6 +52,7 @@ def init_movies():
     movie1.genre.set([Genre.objects.filter(name='giallo').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Rian Johnson').first()])
     movie1.cast.set([Person.objects.filter(name_surname='Ana de Armas').first()])
+    movie1.save()
 
     movie1 = Movie()
     movie1.added_date = '2022-05-09'
@@ -62,7 +63,8 @@ def init_movies():
     movie1.save()
     movie1.genre.set([Genre.objects.filter(name='horror').first()])
     movie1.directors.set([Person.objects.filter(name_surname='John Carpenter').first()])
-    movie1.cast.set([Person.objects.filter(name_surname='Ana de Armas').first()])
+    movie1.cast.set([Person.objects.filter(name_surname='Jamie Lee Curtis').first()])
+    movie1.save()
     
     movie1 = Movie()
     movie1.added_date = '2022-05-08'
@@ -74,6 +76,7 @@ def init_movies():
     movie1.genre.set([Genre.objects.filter(name='giallo').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Peter Jackson').first()])
     movie1.cast.set([Person.objects.filter(name_surname='Elijah Wood').first()])
+    movie1.save()
 
     movie1 = Movie()
     movie1.added_date = '2022-05-07'
@@ -85,6 +88,7 @@ def init_movies():
     movie1.genre.set([Genre.objects.filter(name='animazione').first(), Genre.objects.filter(name='fantasy').first()])
     movie1.directors.set([Person.objects.filter(name_surname='Peter Ramsey').first()])
     movie1.cast.set([Person.objects.filter(name_surname='Hugh Jackman').first()])
+    movie1.save()
 
 users = [("Polylemma", "Polylemma"), ("Cheesecake", "Cheesecake"), ("SunnyPanda", "SunnyPanda")]
 profiles = [('I am Polylemma', ["Cheesecake"], ["Cena con delitto", "Le 5 leggende"], False),

@@ -10,6 +10,16 @@ class Movie(models.Model):
     genre = models.ManyToManyField(to='Genre', related_name='movies')
     cover_path = models.URLField()
 
+    def stars(self):
+        reviews = self.reviews.all()
+        if len(reviews) == 0:
+            return None
+        tot = 0
+        for r in reviews:
+            tot += r.rating
+        return range(int(tot/len(reviews)))
+        
+
 
 class Person(models.Model):
     birthday = models.DateField()

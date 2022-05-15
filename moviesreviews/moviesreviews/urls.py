@@ -27,5 +27,5 @@ urlpatterns = [
     path('movies/', include('movies.urls'))
 ]
 
-erase_db()
+#erase_db()
 init_db()

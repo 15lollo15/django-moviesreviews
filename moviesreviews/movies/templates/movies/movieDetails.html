@@ -3,7 +3,56 @@
 
 {% block content %}
     {% load static %}
-    <h3>{{ object.release_year }}</h3>
-    <h1>{{ object.title }}</h1>
-    <img src="{% static object.cover_path %}"/>
+    <div class="container">
+        <center>
+            <h3>{{ object.release_year }}</h3>
+            <h1>{{ object.title }}</h1>
+            <img src="{% static object.cover_path %}"/>
+        </center>
+        <br>
+        <div class="card">
+          <center>
+            <div class="card-header">
+                <h4>INFOs</h4>
+            </div>
+            <div class="card-body">
+                <h5>Genres</h5>
+                {% for g in  object.genre.all %}
+                    <button class="btn btn-info">{{g.name}}</button>
+                {% endfor %}
+                <h5>Trama</h5>
+                {{object.plot}}
+                <h5>Directors</h5>
+                {% for d in  object.directors.all %}
+                    <button class="btn btn-info">{{d.name_surname}}</button>
+                {% endfor %}
+                <h5>Cast</h5>
+                {% for a in  object.cast.all %}
+                    <button class="btn btn-info">{{a.name_surname}}</button>
+                {% endfor %}
+            </div>
+          </center> 
+        </div>
+        <br>
+        <center><h2>Reviews</h2></center>
+        <div class="media border p-3">
+            <img src="img_avatar3.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+            <div class="media-body">
+              {% for r in  object.reviews.all%}
+                
+              {% endfor %}
+              <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <div class="media p-3">
+                <img src="img_avatar2.png" alt="Jane Doe" class="mr-3 mt-3 rounded-circle" style="width:45px;">
+                <div class="media-body">
+                  <h4>Jane Doe <small><i>Posted on February 20 2016</i></small></h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+              </div>  
+            </div>
+        </div>
+    </div>
 {% endblock content %}
