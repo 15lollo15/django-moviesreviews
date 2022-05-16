@@ -17,9 +17,8 @@ class CreateProfileForm(UserCreationForm):
     def save(self, commit= True):
         user = super().save(commit)
         profile = UserProfile()
-        profile.save()
         profile.user = user
-        profile.save() 
+        profile.save()
         return user
 
 class UserCreateView(CreateView):
