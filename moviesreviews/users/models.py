@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
-    profile_img_path = models.URLField(default=(STATIC_URL + 'imgs/profiles_imgs/default.jpg'))
+    profile_img_path = models.URLField(default=('imgs/profiles_imgs/default.jpg'))
     bio = models.TextField()
     friends = models.ManyToManyField(to='UserProfile', symmetrical=False)
     watch_list = models.ManyToManyField(to=Movie, related_name='in_watchlist')
@@ -24,6 +24,9 @@ class Review(models.Model):
     body = models.TextField()
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     likes = models.ManyToManyField(to='UserProfile', related_name="liked_reviews")
+
+    def stars(self):
+        return range(self.rating)
 
 class Comment(models.Model):
     date = models.DateField()

@@ -162,6 +162,13 @@ def init_users():
     comment.body = 'Non è vero'
     comment.save()
 
+    comment = Comment()
+    comment.date = '2022-05-14'
+    comment.owner = User.objects.filter(username='SunnyPanda').first().profile
+    comment.review = review
+    comment.body = 'Concordo'
+    comment.save()
+
     review.likes.set([User.objects.filter(username='SunnyPanda').first().profile])
 
         
