@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %} 
 
 {% block content %}
-    <form method='POST' >
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit" class="btn btn-success">Accedi</button>
-    <form>
+    <center>
+        <h1>Log-in</h1><br>
+        <form method='POST' >
+            {% csrf_token %}
+            {{form | crispy}}
+            <br>
+            <button type="submit" class="btn btn-success">Accedi</button>
+        <form>
+        <br>
+        <span>Non ti sei ancora registrato? </span><a href="{% url 'signin' %}">Registrati</a>
+    </center>
 {% endblock content %}

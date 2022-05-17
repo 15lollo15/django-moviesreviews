@@ -1,3 +1,4 @@
+from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -14,6 +15,10 @@ def home(request):
     return render(request, template_name='home.html', context=ctx)
 
 class CreateProfileForm(UserCreationForm):
+    profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
+    bio = CharField(label='Biografia(Opzionale)', widget=Textarea)
+    public_or_private = ChoiceField(label="Tipo profilo", choices=(('public', 'Pubblico'), ('private','Privato')))
+
     def save(self, commit= True):
         user = super().save(commit)
         profile = UserProfile()
