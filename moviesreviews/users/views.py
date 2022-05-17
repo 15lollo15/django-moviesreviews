@@ -11,9 +11,12 @@ def like(request):
     user = get_object_or_404(User, username=request.user)
     review = get_object_or_404(Review, pk = review_pk)
 
+    r_text = "like"
     if user.profile in review.likes.all():
         review.likes.remove(user.profile)
+        r_text = "not_like"
     else:
         review.likes.add(user.profile)
+    r_text += "," + str(len(review.likes.all()))
 
-    return HttpResponse('ok')
+    return HttpResponse(r_text)
