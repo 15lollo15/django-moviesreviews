@@ -18,6 +18,9 @@ class Movie(models.Model):
         for r in reviews:
             tot += r.rating
         return range(int(tot/len(reviews)))
+    
+    def count_reviews(self):
+        return len(self.reviews.all())
         
 
 
