@@ -15,7 +15,7 @@ def home(request):
     return render(request, template_name='home.html', context=ctx)
 
 class CreateProfileForm(UserCreationForm):
-    profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
+    #profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
     bio = CharField(label='Biografia(Opzionale)', widget=Textarea)
     public_or_private = ChoiceField(label="Tipo profilo", choices=(('public', 'Pubblico'), ('private','Privato')))
 
@@ -23,6 +23,11 @@ class CreateProfileForm(UserCreationForm):
         user = super().save(commit)
         profile = UserProfile()
         profile.user = user
+        profile.bio = self.cleaned_data['bio']
+        if self.cleaned_data['public_or_private'] == 'public':
+            profile.is_user_page_public = True
+        else:
+            profile.is_user_page_public = False
         profile.save()
         return user
 
