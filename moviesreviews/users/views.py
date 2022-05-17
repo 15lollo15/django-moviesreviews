@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from users.models import Review
+
+from users.models import Comment, Review
 
 @login_required
 def like(request):
