@@ -1,7 +1,8 @@
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from sqlite3 import Date, Time
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import HiddenInput, ModelForm, TextInput, Select
@@ -38,11 +39,17 @@ class ReviewForm(ModelForm):
 def newReview(request):
     user = get_object_or_404(User, username=request.user)
     form = ReviewForm(request.POST)
+    ctx = {}
     if (form.is_valid()):
         moviePK = request.POST.get("movie-pk")
         movie = get_object_or_404(Movie, pk = moviePK)
-        if len(Review.objects.filter(owner = user.profile, movie = movie)) > 0:
-            pass
+        reviews = Review.objects.filter(owner = user.profile, movie = movie)
+        if len(reviews) > 0:
+            r = reviews.first()
+            r.date = timezone.now()
+            r.body = form.cleaned_data['body']
+            r.rating = int(form.cleaned_data['rating'])
+            r.save()
         else:
             review = Review()
             review.owner = user.profile
@@ -51,5 +58,4 @@ def newReview(request):
             review.date = timezone.now()
             review.body = form.cleaned_data['body']
             review.save()
-        print(moviePK)
-    return HttpResponse("ok")
+    return redirect(reverse('movies:moviedetails', args=[moviePK]))

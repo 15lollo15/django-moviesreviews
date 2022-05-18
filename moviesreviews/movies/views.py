@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic.detail import DetailView
 
 from movies.models import Movie
+from users.models import Review
 from users.views import ReviewForm
 
 class MovieDetails(DetailView):

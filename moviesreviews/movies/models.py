@@ -21,6 +21,13 @@ class Movie(models.Model):
     
     def count_reviews(self):
         return len(self.reviews.all())
+
+    def users_that_reviewed(self):
+        users = []
+        reviews = self.reviews.all()
+        for r in reviews:
+            users.append(r.owner)
+        return users
         
 
 
