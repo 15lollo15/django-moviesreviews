@@ -34,6 +34,7 @@ class ReviewForm(ModelForm):
             'rating' : Select(choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
         }
 
+@login_required
 def newReview(request):
     user = get_object_or_404(User, username=request.user)
     form = ReviewForm(request.POST)
