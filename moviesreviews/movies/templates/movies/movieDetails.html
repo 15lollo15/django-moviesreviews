@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %} 
 
 {% block content %}
     {% load static %}
@@ -41,6 +41,12 @@
         <br>
         {% if user.is_authenticated %}
           <center><h2>Reviews</h2></center>
+          <form method="POST" action="{% url 'users:new_review' %}">
+            {% csrf_token %}
+            <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
+            {{form | crispy}}
+            <button class="btn btn-success" type='submit'>Invia recensione</button>
+          </form>
           {% for r in  object.reviews.all%}
           <div class="media border p-2">
             <img src="{% static r.owner.profile_img_path %}" alt="{{r.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:60px;">
