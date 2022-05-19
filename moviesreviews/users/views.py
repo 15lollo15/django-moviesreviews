@@ -39,7 +39,6 @@ class ReviewForm(ModelForm):
 def newReview(request):
     user = get_object_or_404(User, username=request.user)
     form = ReviewForm(request.POST)
-    ctx = {}
     if (form.is_valid()):
         moviePK = request.POST.get("movie-pk")
         movie = get_object_or_404(Movie, pk = moviePK)
@@ -58,4 +57,13 @@ def newReview(request):
             review.date = timezone.now()
             review.body = form.cleaned_data['body']
             review.save()
+    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+@login_required
+def deleteReview(request):
+    user = get_object_or_404(User, username=request.user)
+    moviePK = request.POST.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = moviePK)
+    review = get_object_or_404(Review, owner = user.profile, movie = movie)
+    review.delete()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))

@@ -4,11 +4,12 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from movies.views import *
-from users.views import like, newReview
+from users.views import deleteReview, like, newReview
 
 app_name = 'users'
 
 urlpatterns = [
     path('like/', like, name="like"),
-    path('newreview/', newReview, name="new_review")
+    path('newreview/', newReview, name="new_review"),
+    path('deletereview', deleteReview, name="delete_review")
 ]

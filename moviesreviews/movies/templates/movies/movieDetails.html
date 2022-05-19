@@ -74,6 +74,14 @@
                     <img id="like-button-{{r.pk}}" src="{% static 'icons/thumbs.svg'%}">
                   {% endif %}
                 </button>
+                {% if user.profile == r.owner %}
+                  <button class="btn btn-warning">Modifica</button>
+                  <form class="form-inline" method="POST" action="{% url 'users:delete_review'%}">
+                    {% csrf_token %}
+                    <input name="movie-pk" type="hidden" value="{{ object.pk }}"/>
+                    <button type="submit" class="btn btn-danger">Elimina</button>
+                  </form>
+                {% endif %}
               </span>
               {% for c in  r.comments.all %}
                 <div class="media p-3">
