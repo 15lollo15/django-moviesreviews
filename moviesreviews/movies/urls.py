@@ -5,5 +5,6 @@ from movies.views import *
 app_name = 'movies'
 
 urlpatterns = [
-    path('details/<pk>/', MovieDetails.as_view(), name="moviedetails")
+    path('details/<pk>/', MovieDetails.as_view(), name="moviedetails"),
+    path('search/', SearchView.as_view(), name="searchmovie")
 ]

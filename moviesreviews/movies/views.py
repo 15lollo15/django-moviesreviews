@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
-from movies.models import Movie
+from movies.models import Genre, Movie
 from users.models import Review
 from users.views import ReviewForm
 
@@ -25,5 +26,26 @@ class MovieDetails(DetailView):
 
         context["reviews"] = reviews
         return context
+
+class SearchView(ListView):
+    model = Movie
+    template_name = 'movies/search.html'
+
+    def get_queryset(self):
+        movies = Movie.objects.all()
+        title = self.request.GET.get('title', None)
+        if title != None:
+            movies = movies.filter(title__icontains = title)
+        genre_r = self.request.GET.get('genre', None)
+        if genre_r != None:
+            genre = Genre.objects.filter(name=genre_r)
+            movies = movies.filter(genre__in= genre)
+        return movies
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = self.request.GET.get('title', "")
+        return context
+    
 
     
