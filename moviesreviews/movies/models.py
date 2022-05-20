@@ -28,7 +28,10 @@ class Movie(models.Model):
         for r in reviews:
             users.append(r.owner)
         return users
-        
+    
+    def ordered_reviews(self):
+        reviews = self.reviews.all()
+        return sorted(reviews, key = (lambda r : r.count_likes()), reverse=True)
 
 
 class Person(models.Model):

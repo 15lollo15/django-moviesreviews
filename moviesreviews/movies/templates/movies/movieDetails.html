@@ -42,9 +42,14 @@
         {% if user.is_authenticated %}
           <center><h2>Reviews</h2></center>
           {% if user.profile in object.users_that_reviewed %}
-            
+            <form id="review-form" method="POST" action="{% url 'users:new_review' %}" hidden>
+              {% csrf_token %}
+              <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
+              {{form | crispy}}
+              <button class="btn btn-success" type='submit'>Invia recensione</button>
+            </form>
           {% else %}
-            <form method="POST" action="{% url 'users:new_review' %}">
+            <form id="review-form" method="POST" action="{% url 'users:new_review' %}">
               {% csrf_token %}
               <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
               {{form | crispy}}
@@ -52,7 +57,7 @@
             </form>
           {% endif %}
           
-          {% for r in  object.reviews.all%}
+          {% for r in  reviews%}
           <div class="media border p-2">
             <img src="{% static r.owner.profile_img_path %}" alt="{{r.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:60px;">
             <div class="media-body">
@@ -75,8 +80,8 @@
                   {% endif %}
                 </button>
                 {% if user.profile == r.owner %}
-                  <button class="btn btn-warning">Modifica</button>
-                  <form class="form-inline" method="POST" action="{% url 'users:delete_review'%}">
+                  <button class="btn btn-warning" style="display: inline-block" onclick="modificaToggler()">Modifica</button>
+                  <form class="form-inline" style="display: inline-block" method="POST" action="{% url 'users:delete_review'%}">
                     {% csrf_token %}
                     <input name="movie-pk" type="hidden" value="{{ object.pk }}"/>
                     <button type="submit" class="btn btn-danger">Elimina</button>
@@ -116,6 +121,16 @@
         }
         xhttp.open("GET", "/users/like/?reviewpk=" + pk);
         xhttp.send();
+      }
+
+      function modificaToggler() {
+          form = document.getElementById("review-form")
+          document.getElementById("id_body").value = "{{user_review.body}}"
+          document.getElementById("id_rating").value = "{{user_review.rating}}"
+          if (form.hidden)
+            form.hidden = false
+          else
+            form.hidden = true
       }
     </script>
 {% endblock content %}
