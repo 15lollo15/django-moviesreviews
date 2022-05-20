@@ -80,12 +80,8 @@
                   {% endif %}
                 </button>
                 {% if user.profile == r.owner %}
-                  <button class="btn btn-warning" style="display: inline-block" onclick="modificaToggler()">Modifica</button>
-                  <form class="form-inline" style="display: inline-block" method="POST" action="{% url 'users:delete_review'%}">
-                    {% csrf_token %}
-                    <input name="movie-pk" type="hidden" value="{{ object.pk }}"/>
-                    <button type="submit" class="btn btn-danger">Elimina</button>
-                  </form>
+                  <button class="btn btn-warning" onclick="modificaToggler()">Modifica</button>
+                  <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#areyousuremodal">Elimina</button>
                 {% endif %}
               </span>
               {% for c in  r.comments.all %}
@@ -101,6 +97,22 @@
           </div><br>
           {% endfor %}
         {% endif %}
+        <div class="modal" id="areyousuremodal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body">
+                <p>Sei sicuro?</p>
+                <form class="form-inline" style="display: inline-block" method="POST" action="{% url 'users:delete_review'%}">
+                  {% csrf_token %}
+                  <input name="movie-pk" type="hidden" value="{{ object.pk }}"/>
+                  <button type="submit" class="btn btn-danger">Elimina</button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div> 
+            </div>
+        </div>
     </div>
     <script>
       function like(pk) {
