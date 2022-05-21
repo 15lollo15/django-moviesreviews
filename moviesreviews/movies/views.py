@@ -37,13 +37,15 @@ class SearchView(ListView):
         if title != None:
             movies = movies.filter(title__icontains = title)
         genre_r = self.request.GET.get('genre', None)
-        if genre_r != None:
+        if genre_r != None and genre_r != "":
             genre = Genre.objects.filter(name=genre_r)
             movies = movies.filter(genre__in= genre)
         return movies
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["genres"] = Genre.objects.all()
+        context["selected_genre"] = self.request.GET.get('genre', '')
         context["title"] = self.request.GET.get('title', "")
         return context
     
