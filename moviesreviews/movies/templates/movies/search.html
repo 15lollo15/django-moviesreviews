@@ -14,10 +14,24 @@
                 <select name="genre" id="genres" class="form-control">
                     <option value="">-</option>
                     {% for g in  genres%}
-                        {% if g.name == selected_genre %}
-                            <option selected>{{g.name}}</option>
+                        {% if g.pk == selected_genre %}
+                            <option value="{{g.pk}}" selected>{{g.name}}</option>
                         {% else %}
-                            <option>{{g.name}}</option>
+                            <option value="{{g.pk}}" >{{g.name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input name="title" type="hidden" value="{{title}}"/>
+                <label for="director">Registi:</label>
+                <select name="director" id="director" class="form-control">
+                    <option value="">-</option>
+                    {% for d in  directors%}
+                        {% if d.pk == selected_director %}
+                            <option value="{{d.pk}}" selected>{{d.name_surname}}</option>
+                        {% else %}
+                            <option value="{{d.pk}}" >{{d.name_surname}}</option>
                         {% endif %}
                     {% endfor %}
                 </select>

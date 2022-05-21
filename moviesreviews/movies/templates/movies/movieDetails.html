@@ -23,13 +23,13 @@
             <div class="card-body">
                 <h5>Genres</h5>
                 {% for g in  object.genre.all %}
-                    <a class="btn btn-info" href="{% url 'movies:searchmovie'%}?genre={{g.name}}">{{g.name}}</a>
+                    <a class="btn btn-info" href="{% url 'movies:searchmovie'%}?genre={{g.pk}}">{{g.name}}</a>
                 {% endfor %}
                 <h5>Trama</h5>
                 {{object.plot}}
                 <h5>Directors</h5>
                 {% for d in  object.directors.all %}
-                    <button class="btn btn-info">{{d.name_surname}}</button>
+                    <a class="btn btn-info" href="{% url 'movies:searchmovie'%}?director={{d.pk}}" >{{d.name_surname}}</a>
                 {% endfor %}
                 <h5>Cast</h5>
                 {% for a in  object.cast.all %}
