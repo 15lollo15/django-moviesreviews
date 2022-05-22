@@ -7,10 +7,10 @@
 
 {% block content %}
     <center>
-        <form method="GET">
+        <form method="GET" class="form-inline">
             <div class="form-group">
                 <input name="title" type="hidden" value="{{title}}"/>
-                <label for="genres">Generi:</label>
+                <label for="genres" class="p-2">Generi:</label>
                 <select name="genre" id="genres" class="form-control">
                     <option value="">-</option>
                     {% for g in  genres%}
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <input name="title" type="hidden" value="{{title}}"/>
-                <label for="director">Registi:</label>
+                <label for="director" class="p-2">Registi:</label>
                 <select name="director" id="director" class="form-control">
                     <option value="">-</option>
                     {% for d in  people%}
@@ -38,9 +38,9 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-right: 1em">
                 <input name="title" type="hidden" value="{{title}}"/>
-                <label for="actors">Attori:</label>
+                <label for="actors" class="p-2">Attori:</label>
                 <select name="actor" id="actors" class="form-control">
                     <option value="">-</option>
                     {% for a in  people%}
@@ -54,7 +54,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit" class="btn btn-success">Invia</button>
+            <button type="submit" class="btn btn-success">Cerca</button>
         </form>
         <div class="row mr-auto ml-auto" style="width:90%">
         {% for m in  object_list %}    
