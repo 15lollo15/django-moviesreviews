@@ -56,13 +56,14 @@
                 <div class="form-group" style="margin-right: 1em">
                     <label for="order-by" class="p-2"> Ordina per</label>
                     <select name="order-by" id="order-by" class="form-control">
-                        <option>⬆ Titolo</option>
-                        <option>⬇ Titolo</option>
-                        <option>⬆ Data uscita</option>
-                        <option>⬇ Data uscita</option>
-                        <option>⬆ Valutazione</option>
-                        <option>⬇ Valutazione</option>
-                        <option>🌟 Tendenze</option>
+                        <option value="title-asc" {% if selected_order == 'title-asc' %}selected{% endif %}>⬆ Titolo</option>
+                        <option value="title-desc" {% if selected_order == 'title-desc' %}selected{% endif %}>⬇ Titolo</option>
+                        <option value="year-asc" {% if selected_order == 'year-asc' %}selected{% endif %}>⬆ Anno uscita</option>
+                        <option value="year-desc" {% if selected_order == 'year-desc' %}selected{% endif %}>⬇ Anno uscita</option>
+                        <option value="rating-asc" {% if selected_order == 'rating-asc' %}selected{% endif %}>⬆ Valutazione</option>
+                        <option value="rating-desc" {% if selected_order == 'rating-desc' %}selected{% endif %}>⬇ Valutazione</option>
+                        <option value="last-added" {% if selected_order == 'last-added' %}selected{% endif %}>⏲ Ultime aggiunte</option>
+                        <option value="trand" {% if selected_order == 'trand' %}selected{% endif %}>🌟 Tendenze</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-success">Cerca</button>

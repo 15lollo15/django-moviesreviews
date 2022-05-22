@@ -10,6 +10,12 @@ class Movie(models.Model):
     genre = models.ManyToManyField(to='Genre', related_name='movies')
     cover_path = models.URLField()
 
+    def count_stars(self):
+        stars = self.stars()
+        if stars == None:
+            return 0
+        return len(stars)
+
     def stars(self):
         reviews = self.reviews.all()
         if len(reviews) == 0:

@@ -52,6 +52,25 @@ class SearchView(ListView):
             actors = Person.objects.filter(pk=actors_r)
             movies = movies.filter(cast__in= actors)
 
+        movies = movies.order_by("title")
+
+        order_r = self.request.GET.get('order-by', None)
+        if order_r == "title-desc":
+            movies = movies.order_by("-title")
+        elif order_r == "year-asc":
+            movies = movies.order_by("release_year")
+        elif order_r == "year-desc":
+            movies = movies.order_by("-release_year")
+        elif order_r == "rating-asc":
+            movies = sorted(movies, key=(lambda m : m.count_stars()))
+        elif order_r == "rating-desc":
+            movies = sorted(movies, key=(lambda m : m.count_stars()), reverse=True)
+        elif order_r == "last-added":
+            movies = movies.order_by("added_date")
+        elif order_r == "trand":
+            #TODO
+            pass
+
         return movies
     
     def get_context_data(self, **kwargs):
@@ -72,6 +91,9 @@ class SearchView(ListView):
         if actor == "":
             actor = 0
         context["selected_actor"] = int(actor)
+
+        order_by = self.request.GET.get("order-by")
+        context["selected_order"] = order_by
 
         context["title"] = self.request.GET.get('title', "")
         return context
