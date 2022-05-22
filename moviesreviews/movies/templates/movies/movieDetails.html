@@ -33,7 +33,7 @@
                 {% endfor %}
                 <h5>Cast</h5>
                 {% for a in  object.cast.all %}
-                    <button class="btn btn-info">{{a.name_surname}}</button>
+                <a class="btn btn-info" href="{% url 'movies:searchmovie'%}?actor={{a.pk}}" >{{a.name_surname}}</a>
                 {% endfor %}
             </div>
           </center> 

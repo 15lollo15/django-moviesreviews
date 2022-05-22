@@ -46,21 +46,33 @@ class SearchView(ListView):
         if directors_r != None and directors_r != "":
             directors = Person.objects.filter(pk=directors_r)
             movies = movies.filter(directors__in= directors)
+        
+        actors_r = self.request.GET.get('actor', None)
+        if actors_r != None and actors_r != "":
+            actors = Person.objects.filter(pk=actors_r)
+            movies = movies.filter(cast__in= actors)
 
         return movies
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["genres"] = Genre.objects.all()
-        context["directors"] = Person.objects.all()
+        context["people"] = Person.objects.all()
         genre = self.request.GET.get('genre', 0)
         if genre == "":
             genre = 0
         context["selected_genre"] = int(genre)
+
         director = self.request.GET.get('director', 0)
         if director == "":
             director = 0
         context["selected_director"] = int(director)
+
+        actor = self.request.GET.get('actor', 0)
+        if actor == "":
+            actor = 0
+        context["selected_actor"] = int(actor)
+
         context["title"] = self.request.GET.get('title', "")
         return context
     

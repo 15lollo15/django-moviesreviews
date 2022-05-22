@@ -38,5 +38,11 @@ class Person(models.Model):
     birthday = models.DateField()
     name_surname = models.CharField(max_length=50)
 
+    def is_a_director(self):
+        return len(self.movies_as_director.all()) > 0
+    
+    def is_an_actor(self):
+        return len(self.movies_as_actor.all()) > 0
+
 class Genre(models.Model):
     name = models.CharField(max_length=20)
