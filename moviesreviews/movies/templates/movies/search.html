@@ -7,54 +7,56 @@
 
 {% block content %}
     <center>
-        <form method="GET" class="form-inline">
-            <div class="form-group">
-                <input name="title" type="hidden" value="{{title}}"/>
-                <label for="genres" class="p-2">Generi:</label>
-                <select name="genre" id="genres" class="form-control">
-                    <option value="">-</option>
-                    {% for g in  genres%}
-                        {% if g.pk == selected_genre %}
-                            <option value="{{g.pk}}" selected>{{g.name}}</option>
-                        {% else %}
-                            <option value="{{g.pk}}" >{{g.name}}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <input name="title" type="hidden" value="{{title}}"/>
-                <label for="director" class="p-2">Registi:</label>
-                <select name="director" id="director" class="form-control">
-                    <option value="">-</option>
-                    {% for d in  people%}
-                        {% if d.is_a_director %}
-                            {% if d.pk == selected_director %}
-                                <option value="{{d.pk}}" selected>{{d.name_surname}}</option>
+        <form method="GET" class="form-inline justify-content-center">
+            <div class="form-group border p-2 rounded">
+                <div class="form-group">
+                    <input name="title" type="hidden" value="{{title}}"/>
+                    <label for="genres" class="p-2">Generi:</label>
+                    <select name="genre" id="genres" class="form-control">
+                        <option value="">-</option>
+                        {% for g in  genres%}
+                            {% if g.pk == selected_genre %}
+                                <option value="{{g.pk}}" selected>{{g.name}}</option>
                             {% else %}
-                                <option value="{{d.pk}}" >{{d.name_surname}} ({{d.birthday}})</option>
+                                <option value="{{g.pk}}" >{{g.name}}</option>
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group" style="margin-right: 1em">
-                <input name="title" type="hidden" value="{{title}}"/>
-                <label for="actors" class="p-2">Attori:</label>
-                <select name="actor" id="actors" class="form-control">
-                    <option value="">-</option>
-                    {% for a in  people%}
-                        {% if a.is_an_actor %}
-                            {% if a.pk == selected_actor %}
-                                <option value="{{a.pk}}" selected>{{a.name_surname}}</option>
-                            {% else %}
-                                <option value="{{a.pk}}" >{{a.name_surname}} ({{a.birthday}})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input name="title" type="hidden" value="{{title}}"/>
+                    <label for="director" class="p-2">Registi:</label>
+                    <select name="director" id="director" class="form-control">
+                        <option value="">-</option>
+                        {% for d in  people%}
+                            {% if d.is_a_director %}
+                                {% if d.pk == selected_director %}
+                                    <option value="{{d.pk}}" selected>{{d.name_surname}}</option>
+                                {% else %}
+                                    <option value="{{d.pk}}" >{{d.name_surname}} ({{d.birthday}})</option>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </select>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="margin-right: 1em">
+                    <input name="title" type="hidden" value="{{title}}"/>
+                    <label for="actors" class="p-2">Attori:</label>
+                    <select name="actor" id="actors" class="form-control">
+                        <option value="">-</option>
+                        {% for a in  people%}
+                            {% if a.is_an_actor %}
+                                {% if a.pk == selected_actor %}
+                                    <option value="{{a.pk}}" selected>{{a.name_surname}}</option>
+                                {% else %}
+                                    <option value="{{a.pk}}" >{{a.name_surname}} ({{a.birthday}})</option>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Cerca</button>
             </div>
-            <button type="submit" class="btn btn-success">Cerca</button>
         </form>
         <div class="row mr-auto ml-auto" style="width:90%">
         {% for m in  object_list %}    
