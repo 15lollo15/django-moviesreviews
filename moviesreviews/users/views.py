@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -60,6 +61,20 @@ def newReview(request):
             review.body = form.cleaned_data['body']
             review.save()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+@login_required
+def addToWatchlist(request):
+    user = get_object_or_404(User, username=request.user)
+    moviePK = request.GET.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = moviePK)
+    r_text = "added"
+    if movie in user.profile.watch_list.all():
+        user.profile.watch_list.remove(movie)
+        r_text = "removed"
+    else:
+        user.profile.watch_list.add(movie)
+
+    return HTTPResponse(r_text)
 
 @login_required
 def deleteReview(request):
