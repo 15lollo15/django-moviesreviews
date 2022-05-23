@@ -14,8 +14,14 @@ class MovieDetails(DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = ReviewForm()
         context["user_review"] = None
+        context["is_in_user_watchlist"] = False
+
 
         movie = context["object"]
+
+        if self.request.user.is_authenticated:
+            context["is_in_user_watchlist"] = self.request.user.profile in movie.in_watchlist.all()
+
         reviews = movie.ordered_reviews()
         if self.request.user.is_authenticated:
             rs = Review.objects.filter(owner = self.request.user.profile, movie = movie)

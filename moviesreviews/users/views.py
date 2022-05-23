@@ -1,4 +1,3 @@
-from http.client import HTTPResponse
 import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -74,7 +73,7 @@ def addToWatchlist(request):
     else:
         user.profile.watch_list.add(movie)
 
-    return HTTPResponse(r_text)
+    return HttpResponse(r_text)
 
 @login_required
 def deleteReview(request):
