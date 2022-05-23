@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>{{object.user.username}}</h1>
+    <div class="container">
+        <center>
+            <h1>{{object.user.username}}</h1>
+            <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
+            <br>
+            <button class="btn btn-info m-2">Modifica profilo</button
+        </center>
+    </div>
+    
 {% endblock content %}
