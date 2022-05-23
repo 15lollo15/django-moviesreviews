@@ -68,7 +68,7 @@
                   </svg>
                 {% endfor %}
               </span>
-              <h4>{{r.owner.user.username}} <small><i>{{r.date}}</i></small></h4>
+              <h4><a href="{% url 'users:profile_details' r.owner.pk%}">{{r.owner.user.username}}</a><small><i>{{r.date}}</i></small></h4>
               <p>{{r.body}}</p>
               <span>
                 <span id="like-{{r.pk}}">{{r.count_likes}}</span> 

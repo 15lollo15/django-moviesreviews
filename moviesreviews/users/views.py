@@ -1,3 +1,4 @@
+import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from sqlite3 import Date, Time
@@ -6,10 +7,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import HiddenInput, ModelForm, TextInput, Select
+from django.views.generic.detail import DetailView
 from movies.models import Movie
 
 
-from users.models import Comment, Review
+from users.models import Comment, Review, UserProfile
 
 @login_required
 def like(request):
@@ -67,3 +69,8 @@ def deleteReview(request):
     review = get_object_or_404(Review, owner = user.profile, movie = movie)
     review.delete()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+class ProfileDetails(DetailView):
+    model = UserProfile
+    template_name = 'users/profileDetails.html'
+
