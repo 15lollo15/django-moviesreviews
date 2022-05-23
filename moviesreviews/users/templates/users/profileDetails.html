@@ -7,8 +7,27 @@
             <h1>{{object.user.username}}</h1>
             <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
             <br>
-            <button class="btn btn-info m-2">Modifica profilo</button
+            <button class="btn btn-info m-2">Modifica profilo</button>
+            <h2>Watchlist</h2>
+            <table class="table">
+                <tbody>
+                    {% for m in object.watch_list.all %}
+                        <tr>
+                            <td>
+                                <img src="{% static m.cover_path%}" style="height:6em"/>
+                            </td>
+                            <td>{{m.title}}</td>
+                            <td>
+                                <button class="btn btn-success">Visto</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
         </center>
+        
+
     </div>
     
 {% endblock content %}
