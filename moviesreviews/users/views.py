@@ -11,7 +11,7 @@ from django.views.generic.detail import DetailView
 from movies.models import Movie
 
 
-from users.models import Comment, Review, UserProfile
+from users.models import Comment, Review, UserProfile, Watch
 
 @login_required
 def like(request):
@@ -83,6 +83,29 @@ def deleteReview(request):
     review = get_object_or_404(Review, owner = user.profile, movie = movie)
     review.delete()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+@login_required
+def removeFromWatchlist(request):
+    user = get_object_or_404(User, username=request.user)
+    moviePK = request.POST.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = moviePK)
+    is_viewed = request.POST.get("is-viewed", None)
+    if is_viewed == None:
+        is_viewed = False
+    else:
+        is_viewed = (is_viewed == "True")
+    user.profile.watch_list.remove(movie)
+
+    if is_viewed:
+        watch = Watch()
+        watch.movie = movie
+        watch.user = user.profile
+        watch.date = timezone.now()
+        watch.save()
+    
+    return redirect(reverse('users:profile_details', args=[user.profile.pk]))
+
+
 
 class ProfileDetails(DetailView):
     model = UserProfile

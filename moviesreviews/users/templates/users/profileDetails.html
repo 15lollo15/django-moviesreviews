@@ -16,9 +16,20 @@
                             <td>
                                 <img src="{% static m.cover_path%}" style="height:6em"/>
                             </td>
-                            <td>{{m.title}}</td>
-                            <td>
-                                <button class="btn btn-success">Visto</button>
+                            <td class="align-middle"><strong>{{m.title}}</strong></td>
+                            <td class="align-middle">
+                                <form method="POST" class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
+                                    <input type="hidden" name="is-viewed" value="True"/>
+                                    <button type="submit" class="btn btn-success">Visto</button>
+                                </form>
+                                <form method="POST"  class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
+                                    <input type="hidden" name="is-viewed" value="False"/>
+                                    <button type="submit" class="btn btn-secondary">Rimuovi</button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}
