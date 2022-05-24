@@ -4,6 +4,7 @@ class Movie(models.Model):
     added_date = models.DateField()
     release_year = models.PositiveSmallIntegerField()
     title = models.CharField(max_length=200)
+    duration = models.PositiveSmallIntegerField() # In minutes
     directors = models.ManyToManyField(to='Person', related_name='movies_as_director')
     cast = models.ManyToManyField(to='Person', related_name='movies_as_actor')
     plot = models.TextField()
