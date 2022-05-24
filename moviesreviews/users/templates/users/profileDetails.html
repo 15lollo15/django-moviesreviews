@@ -11,7 +11,21 @@
             {% if not can_show %}
                 <h2>Pagina privata</h2>
             {% else %}
-                <button class="btn btn-info m-2">Modifica profilo</button>
+                {% if object.user.pk == user.pk %}
+                    <button class="btn btn-info m-2">Modifica profilo</button>
+                {% else %}
+                    <form method="POST" action="{% url 'users:addremovefriend' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile-pk" value="{{object.pk}}"/>             
+                        <button type="submit" class="btn btn-primary m-2">
+                            {% if object in user.profile.friends.all %}
+                                Rimuovi dagli amici
+                            {% else %}
+                                Aggiungi agli amici
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
                 <h2>Watchlist</h2>
                 <table class="table">
                     <tbody>

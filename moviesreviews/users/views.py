@@ -106,6 +106,22 @@ def removeFromWatchlist(request):
     
     return redirect(reverse('users:profile_details', args=[user.profile.pk]))
 
+@login_required
+def addRemoveFriend(request):
+    myUser = get_object_or_404(User, pk = request.user.pk)
+    myProfile = get_object_or_404(UserProfile, user = myUser)
+
+    otherProfile = get_object_or_404(UserProfile, pk = request.POST.get('profile-pk', None))
+
+    if myProfile == otherProfile:
+        return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
+
+    if otherProfile in myProfile.friends.all():
+        myProfile.friends.remove(otherProfile)
+    else:
+        myProfile.friends.add(otherProfile)
+
+    return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
 
 
 class ProfileDetails(LoginRequiredMixin,DetailView):
