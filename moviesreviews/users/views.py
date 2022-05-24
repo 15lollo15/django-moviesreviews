@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput, ModelForm, TextInput, Select
 from django.views.generic.detail import DetailView
 from movies.models import Movie
@@ -107,7 +108,23 @@ def removeFromWatchlist(request):
 
 
 
-class ProfileDetails(DetailView):
+class ProfileDetails(LoginRequiredMixin,DetailView):
     model = UserProfile
     template_name = 'users/profileDetails.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profileOwner = context["object"]
+        context['can_show'] = True
+        if profileOwner.is_user_page_public:
+            return context
+
+        user = get_object_or_404(User, pk = self.request.user.pk)
+        profile = get_object_or_404(UserProfile, user = user)
+
+        if profile not in profileOwner.friends.all():
+            context['can_show'] = False
+
+        return context
+    
 
