@@ -7,6 +7,7 @@
             <h1>{{object.user.username}}</h1>
             <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
             <br>
+            <p class="text-muted">{{object.bio}}</p>
             <button class="btn btn-info m-2">Modifica profilo</button>
             <h2>Watchlist</h2>
             <table class="table">
