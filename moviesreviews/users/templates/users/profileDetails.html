@@ -33,7 +33,15 @@
                             Film preferito
                         </div>
                         <div class="card-body text-center">
-                          <p class="card-text">TODO</p>
+                          <p class="card-text">
+                              {% if favourite_movie != None %}
+                                <a style="color:white" href="{% url 'movies:moviedetails' favourite_movie.pk%}">
+                                    {{favourite_movie.title}}
+                                </a>
+                              {% else %}
+                                {{NC}}
+                              {% endif %}
+                          </p>
                         </div>
                     </div>
                     <div class="card bg-warning">
@@ -41,7 +49,15 @@
                             Genere preferito
                         </div>
                         <div class="card-body text-center">
-                          <p class="card-text">Some text inside the first card</p>
+                          <p class="card-text">
+                            {% if favourite_genre != None %}
+                                <a style="color:white">
+                                    {{favourite_genre.name}}
+                                </a>
+                            {% else %}
+                                {{NC}}
+                            {% endif %}
+                          </p>
                         </div>
                     </div>
                     <div class="card bg-danger">
@@ -49,7 +65,15 @@
                             Tempo (ultimo mese)
                         </div>
                         <div class="card-body text-center">
-                          <p class="card-text">Some text inside the first card</p>
+                          <p class="card-text">
+                            {% if watchtime != None %}
+                                <a style="color:white">
+                                    {{watchtime}}
+                                </a>
+                            {% else %}
+                                {{NC}}
+                            {% endif %}
+                          </p>
                         </div>
                       </div>
                 </div>

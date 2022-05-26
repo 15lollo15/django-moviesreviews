@@ -9,7 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput, ModelForm, TextInput, Select
 from django.views.generic.detail import DetailView
-from movies.models import Movie
+from movies.models import Genre, Movie
+from django.db.models import Count, Sum
+import datetime
 
 
 from users.models import Comment, Review, UserProfile, Watch
@@ -132,6 +134,31 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
         context = super().get_context_data(**kwargs)
         profileOwner = context["object"]
         context['can_show'] = True
+        context['favourite_movie'] = None
+        context['favourite_genre'] = None
+        context['watchtime'] = None
+
+        # Favourite movie
+        watches = Watch.objects.filter(user=profileOwner).values("movie").annotate(mcount = Count("movie")).order_by("-mcount")
+        if len(watches.all()) > 0:
+            w = watches.all().first()
+            context['favourite_movie'] = get_object_or_404(Movie, pk = w["movie"])
+
+        # Favourite genre
+        watches = Watch.objects.filter(user=profileOwner).values("movie")
+        movies = Movie.objects.filter(pk__in = watches).values("genre").annotate(gcount = Count("genre")).order_by("-gcount")
+        if len(movies.all()) > 0:
+            m = movies.all().first()
+            context['favourite_genre'] = get_object_or_404(Genre, pk = m["genre"])
+        
+        
+        # Watch time
+        watches = Watch.objects.filter(user=profileOwner).filter(date__gt = (timezone.now() - datetime.timedelta(days=30))).values("movie")
+        movies = Movie.objects.filter(pk__in = watches).aggregate(Sum('duration'))
+        if len(movies) > 0:
+            context['watchtime'] = movies["duration__sum"]
+        
+
         if profileOwner.is_user_page_public:
             return context
 
@@ -140,6 +167,9 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
 
         if profile not in profileOwner.friends.all():
             context['can_show'] = False
+
+        
+        
 
         return context
     
