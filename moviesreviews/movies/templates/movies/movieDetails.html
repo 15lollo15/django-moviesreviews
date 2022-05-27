@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %} 
 
+{% block header %}
+<script>
+
+  function setDate() {
+    dateInput = document.getElementById("watchdate");
+    dateInput.valueAsDate = new Date();
+  }
+</script>
+{% endblock header %}
+
+{% block onload %}
+  setDate()
+{% endblock onload %}
+
 {% block content %}
     {% load static %}
     <div class="container">
@@ -23,6 +37,13 @@
                     Aggiungi alla watchlist
                   {% endif %}
               </button>
+              <form method="POST" action="{% url 'users:addwatch' %}">
+                {% csrf_token %}
+                <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
+                <label to="watchdate" value="">Data visione</label>
+                <input name="watchdate" id="watchdate" type="date"/>
+                <button type="submit" class="btn btn-info">Aggiungi visione</button>
+              </form>
             {% endif %}
         </center>
         <br>

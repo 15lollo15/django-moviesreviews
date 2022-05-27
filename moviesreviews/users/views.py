@@ -1,7 +1,5 @@
-import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from sqlite3 import Date, Time
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
@@ -11,6 +9,7 @@ from django.forms import HiddenInput, ModelForm, TextInput, Select
 from django.views.generic.detail import DetailView
 from movies.models import Genre, Movie
 from django.db.models import Count, Sum
+from datetime import datetime
 import datetime
 
 
@@ -168,9 +167,26 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
         if profile not in profileOwner.friends.all():
             context['can_show'] = False
 
-        
-        
-
         return context
-    
+
+@login_required    
+def addWatch(request):
+    movie_pk = request.POST.get('movie-pk', None)
+    if movie_pk == "":
+        movie_pk = None
+    movie = get_object_or_404(Movie, pk = movie_pk)
+    profile = request.user.profile
+    dateS = request.POST.get('watchdate', None)
+    status = 'failed'
+    if dateS != None:
+        watch = Watch()
+        watch.user = profile
+        watch.movie = movie
+        watch.date = dateS
+        watch.save()
+        status = 'ok'
+
+    response = redirect(reverse('movies:moviedetails', args=[movie_pk]))
+    response['Location'] += '?addwatch=' + status
+    return response
 
