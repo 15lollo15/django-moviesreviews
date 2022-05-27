@@ -37,6 +37,7 @@
                     Aggiungi alla watchlist
                   {% endif %}
               </button>
+              <p>{{object.count_views}} 👁</p>
               <form method="POST" action="{% url 'users:addwatch' %}">
                 {% csrf_token %}
                 <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>

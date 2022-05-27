@@ -11,6 +11,9 @@ class Movie(models.Model):
     genre = models.ManyToManyField(to='Genre', related_name='movies')
     cover_path = models.URLField()
 
+    def count_views(self):
+        return len(self.views.all())
+
     def count_stars(self):
         stars = self.stars()
         if stars == None:
