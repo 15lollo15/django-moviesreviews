@@ -16,7 +16,7 @@ def home(request):
 
 class CreateProfileForm(UserCreationForm):
     #profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
-    bio = CharField(label='Biografia(Opzionale)', widget=Textarea)
+    bio = CharField(label='Biografia(Opzionale)', widget=Textarea, required=False)
     public_or_private = ChoiceField(label="Tipo profilo", choices=(('public', 'Pubblico'), ('private','Privato')))
 
     def save(self, commit= True):
