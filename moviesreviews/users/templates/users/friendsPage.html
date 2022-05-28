@@ -7,7 +7,7 @@
         <table class="table">
             <tbody>
                 {% for friend in object.friends.all %}
-                    <tr>
+                    <tr id="row-{{friend.pk}}">
                         <td class="align-middle">
                             <img class="rounded-circle border" style="height:4em" src="{% static friend.profile_img_path %}"/>
                         </td>
@@ -17,7 +17,12 @@
                             </a>
                         </td>
                         <td class="align-middle text-right">
-                            <button class="btn btn-danger">Rimuovi amicizia</button>
+                            <form method="POST" action="{% url 'users:addremovefriend' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="profile-pk" value="{{friend.pk}}"/>
+                                <input type="hidden" name="to-friends" value="true" />
+                                <button class="btn btn-danger" type="submit" >Rimuovi amicizia</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

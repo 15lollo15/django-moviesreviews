@@ -122,6 +122,8 @@ def addRemoveFriend(request):
     else:
         myProfile.friends.add(otherProfile)
 
+    if (request.POST.get('to-friends', None) != None):
+        return redirect(reverse('users:friends', args=[myProfile.pk]))
     return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
 
 
