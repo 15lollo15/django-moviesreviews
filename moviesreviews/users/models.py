@@ -12,6 +12,10 @@ class UserProfile(models.Model):
     watch_list = models.ManyToManyField(to=Movie, related_name='in_watchlist')
     is_user_page_public = models.BooleanField(default=True)
 
+    def notMyFriends(self):
+        return UserProfile.objects.filter(friends = self).exclude(pk__in = self.friends.all())
+
+
 class Watch(models.Model):
     date = models.DateField()
     user = models.ForeignKey(to='UserProfile', on_delete=models.CASCADE, related_name="watched")
