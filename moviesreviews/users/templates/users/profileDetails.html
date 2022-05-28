@@ -8,25 +8,24 @@
             <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
             <br>
             <p class="text-muted">{{object.bio}}</p>
+            {% if object.user.pk == user.pk %}
+                <button class="btn btn-info m-2">Modifica profilo</button>
+            {% else %}
+                <form method="POST" action="{% url 'users:addremovefriend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile-pk" value="{{object.pk}}"/>             
+                    <button type="submit" class="btn btn-primary m-2">
+                        {% if object in user.profile.friends.all %}
+                            Rimuovi dagli amici
+                        {% else %}
+                            Aggiungi agli amici
+                        {% endif %}
+                    </button>
+                </form>
+            {% endif %}
             {% if not can_show %}
                 <h2>Pagina privata</h2>
-            {% else %}
-                {% if object.user.pk == user.pk %}
-                    <button class="btn btn-info m-2">Modifica profilo</button>
-                {% else %}
-                    <form method="POST" action="{% url 'users:addremovefriend' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="profile-pk" value="{{object.pk}}"/>             
-                        <button type="submit" class="btn btn-primary m-2">
-                            {% if object in user.profile.friends.all %}
-                                Rimuovi dagli amici
-                            {% else %}
-                                Aggiungi agli amici
-                            {% endif %}
-                        </button>
-                    </form>
-                {% endif %}
-                
+            {% else %}                
                 <div class="card-deck">
                     <div class="card bg-primary">
                         <div class="card-header">

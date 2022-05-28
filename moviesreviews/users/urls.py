@@ -4,7 +4,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from movies.views import *
-from users.views import ProfileDetails, addRemoveFriend, addToWatchlist, addWatch, deleteReview, like, newReview, removeFromWatchlist
+from users.views import FriendsPage, ProfileDetails, addRemoveFriend, addToWatchlist, addWatch, deleteReview, like, newReview, removeFromWatchlist
 
 app_name = 'users'
 
@@ -16,5 +16,6 @@ urlpatterns = [
     path('addtowatchlist/', addToWatchlist, name="addtowatchlist"),
     path('removefromwatchlist/', removeFromWatchlist, name="removefromwatchlist"),
     path('addremovefriend/', addRemoveFriend, name="addremovefriend"),
-    path('addwatch/', addWatch, name="addwatch")
+    path('addwatch/', addWatch, name="addwatch"),
+    path('friends/<pk>/', FriendsPage.as_view(), name="friends")
 ]

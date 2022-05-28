@@ -190,3 +190,6 @@ def addWatch(request):
     response['Location'] += '?addwatch=' + status
     return response
 
+class FriendsPage(LoginRequiredMixin,DetailView):
+    model = UserProfile
+    template_name = 'users/friendsPage.html'

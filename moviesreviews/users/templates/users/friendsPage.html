@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <center><h1>Amici</h1></center>
+        <table class="table">
+            <tbody>
+                {% for friend in object.friends.all %}
+                    <tr>
+                        <td class="align-middle">
+                            <img class="rounded-circle border" style="height:4em" src="{% static friend.profile_img_path %}"/>
+                        </td>
+                        <td class="align-middle">
+                            <a href="{% url 'users:profile_details' friend.pk %}">
+                                <h3>{{friend.user.username}}</h3>
+                            </a>
+                        </td>
+                        <td class="align-middle text-right">
+                            <button class="btn btn-danger">Rimuovi amicizia</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
