@@ -1,4 +1,6 @@
+from datetime import timedelta
 from django.db import models
+from django.utils import timezone
 
 class Movie(models.Model):
     added_date = models.DateField()
@@ -10,6 +12,12 @@ class Movie(models.Model):
     plot = models.TextField()
     genre = models.ManyToManyField(to='Genre', related_name='movies')
     cover_path = models.URLField()
+
+    def count_recent_views(self):
+        daysAgo = timezone.now() - timedelta(days=30)
+        n = len(self.views.filter(date__gt = daysAgo))
+        print(n)
+        return n
 
     def count_views(self):
         return len(self.views.all())

@@ -1,3 +1,4 @@
+from cProfile import label
 from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
@@ -10,8 +11,9 @@ from users.models import UserProfile
 # Create your views here.
 def home(request):
     last_added_movies = Movie.objects.order_by('-added_date')[:4]
-    trend_movies = Movie.objects.all()[:4]
-    ctx = {'last_added' : last_added_movies, 'trend_movies' : trend_movies}
+    trend_movies = Movie.objects.all()
+    trend_movies = sorted(trend_movies, key=(lambda m  : m.count_recent_views()), reverse=True)
+    ctx = {'last_added' : last_added_movies, 'trend_movies' : trend_movies[:4]}
     return render(request, template_name='home.html', context=ctx)
 
 class CreateProfileForm(UserCreationForm):
