@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block header %}
+    <title>{{object.user.username}}</title>
+{% endblock header %}
+
 {% block content %}
     <div class="container">
         <center>
