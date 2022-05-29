@@ -64,7 +64,7 @@
                         <div class="card-body text-center">
                           <p class="card-text">
                             {% if favourite_genre != None %}
-                                <a style="color:white">
+                                <a style="color:white" href="{% url 'movies:searchmovie'%}?genre={{favourite_genre.pk}}">
                                     {{favourite_genre.name}}
                                 </a>
                             {% else %}
