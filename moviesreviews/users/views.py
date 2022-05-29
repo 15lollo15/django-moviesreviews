@@ -135,6 +135,13 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
     model = UserProfile
     template_name = 'users/profileDetails.html'
 
+    def formatWatchtime(watchtime):
+        if watchtime < 60:
+            return str(watchtime) + " m"
+        h = watchtime // 60
+        m = watchtime % 60
+        return str(h) + " h " + str(m) + " m"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profileOwner = context["object"]
@@ -161,7 +168,7 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
         watches = Watch.objects.filter(user=profileOwner).filter(date__gt = (timezone.now() - datetime.timedelta(days=30))).values("movie")
         movies = Movie.objects.filter(pk__in = watches).aggregate(Sum('duration'))
         if len(movies) > 0:
-            context['watchtime'] = movies["duration__sum"]
+            context['watchtime'] = ProfileDetails.formatWatchtime(movies["duration__sum"])
         
 
         if profileOwner.is_user_page_public:
@@ -174,6 +181,8 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
             context['can_show'] = False
 
         return context
+
+
 
 @login_required    
 def addWatch(request):
