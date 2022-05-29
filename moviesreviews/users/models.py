@@ -14,6 +14,12 @@ class UserProfile(models.Model):
 
     def notMyFriends(self):
         return UserProfile.objects.filter(friends = self).exclude(pk__in = self.friends.all())
+    
+    def count_friends(self):
+        return len(self.friends.all())
+    
+    def count_notMyFriends(self):
+        return len(self.notMyFriends())
 
 
 class Watch(models.Model):
