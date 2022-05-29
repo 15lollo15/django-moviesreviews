@@ -91,7 +91,13 @@
                       </div>
                 </div>
 
+                <br>
                 <h2>Watchlist</h2>
+                {% if object.count_watchlist == 0%}
+                    <div class="alert alert-info alert-dismissible fade show m-3">
+                        Non hai film nella watchlist
+                    </div>
+                {% endif %}
                 <table class="table">
                     <tbody>
                         {% for m in object.watch_list.all %}
