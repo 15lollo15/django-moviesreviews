@@ -117,14 +117,18 @@ def addRemoveFriend(request):
     if myProfile == otherProfile:
         return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
 
+    action = "added"
     if otherProfile in myProfile.friends.all():
         myProfile.friends.remove(otherProfile)
+        action = "removed"
     else:
         myProfile.friends.add(otherProfile)
 
     if (request.POST.get('to-friends', None) != None):
         return redirect(reverse('users:friends', args=[myProfile.pk]))
-    return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
+    response = redirect(reverse('users:profile_details', args=[otherProfile.pk]))
+    response["Location"] += '?action=' + action
+    return response
 
 
 class ProfileDetails(LoginRequiredMixin,DetailView):

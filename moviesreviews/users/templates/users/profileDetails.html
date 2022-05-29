@@ -4,6 +4,16 @@
 {% block content %}
     <div class="container">
         <center>
+            {% if 'action' in request.GET %}
+                <div class="alert alert-success alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {% if request.GET.action == "added" %}               
+                            Amicizia aggiunta con successo!! 
+                    {% else %}
+                            Amicizia rimossa con successo!!
+                    {% endif %}
+                </div>
+            {% endif %}
             <h1>{{object.user.username}}</h1>
             <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
             <br>
