@@ -70,6 +70,11 @@
                 <button type="submit" class="btn btn-success">Cerca</button>
             </div>
         </form>
+        {% if object_list|length == 0%}
+            <div class="alert alert-danger alert-dismissible fade show m-3">
+                Nessun film trovato
+            </div>
+        {% endif %}
         <div class="row mr-auto ml-auto" style="width:90%">
         {% for m in  object_list %}    
             <div class="col-lg-3 col-md-4 col-sm-6 mt-3">
