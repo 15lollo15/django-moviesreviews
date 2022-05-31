@@ -1,4 +1,5 @@
 from cProfile import label
+from urllib import request
 from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
@@ -18,7 +19,7 @@ def home(request):
     return render(request, template_name='home.html', context=ctx)
 
 class CreateProfileForm(UserCreationForm):
-    #profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
+    profile_img = ImageField(required=False, label='Immagine profilo(Opzionale)')
     bio = CharField(label='Biografia(Opzionale)', widget=Textarea, required=False)
     public_or_private = ChoiceField(label="Tipo profilo", choices=(('public', 'Pubblico'), ('private','Privato')))
 
@@ -27,7 +28,13 @@ class CreateProfileForm(UserCreationForm):
         profile = UserProfile()
         profile.user = user
         profile.bio = self.cleaned_data['bio']
-        profile.profile_img.save("default.jpg", File(open("media/imgs/profileImgs/default.jpg", "rb")))
+        print(self.cleaned_data)
+        tmp_img = self.cleaned_data["profile_img"]
+        if tmp_img == None:
+            profile.profile_img.save("default.jpg", File(open("media/imgs/profileImgs/default.jpg", "rb")))
+        else:
+            profile.profile_img = tmp_img
+            
         if self.cleaned_data['public_or_private'] == 'public':
             profile.is_user_page_public = True
         else:
@@ -40,4 +47,6 @@ class UserCreateView(CreateView):
     template_name = 'user_create.html'
     success_url = reverse_lazy("login")
 
+    
+    
 
