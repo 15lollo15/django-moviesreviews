@@ -38,4 +38,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #erase_db()
-#init_db()
+init_db()
