@@ -19,7 +19,7 @@
                 </div>
             {% endif %}
             <h1>{{object.user.username}}</h1>
-            <img src="{% static object.profile_img_path%}" class="rounded-circle border m-2" style="height: 10em"/>
+            <img src="{{object.profile_img.url}}" class="rounded-circle border m-2" style="height: 10em"/>
             <br>
             <p class="text-muted">{{object.bio}}</p>
             {% if object.user.pk == user.pk %}
@@ -103,7 +103,7 @@
                         {% for m in object.watch_list.all %}
                             <tr>
                                 <td>
-                                    <img src="{% static m.cover_path%}" style="height:6em"/>
+                                    <img src="{{m.cover.url}}" style="height:6em"/>
                                 </td>
                                 <td class="align-middle"><strong>{{m.title}}</strong></td>
                                 <td class="align-middle">

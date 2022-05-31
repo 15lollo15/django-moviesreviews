@@ -30,7 +30,7 @@
                         {% if user.is_authenticated %}
                             <li class="nav-item dropdown" style="list-style-type: none;">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                    <img src="{% static user.profile.profile_img_path %}" class="rounded-circle" style="width:1.5em"/>
+                                    <img src="{{user.profile.profile_img.url}}" class="rounded-circle" style="width:1.5em"/>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="{% url 'users:profile_details' user.profile.pk%}">

@@ -105,4 +105,3 @@ class SearchView(ListView):
         return context
     
 
-    

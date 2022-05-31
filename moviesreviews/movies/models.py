@@ -11,7 +11,7 @@ class Movie(models.Model):
     cast = models.ManyToManyField(to='Person', related_name='movies_as_actor')
     plot = models.TextField()
     genre = models.ManyToManyField(to='Genre', related_name='movies')
-    cover_path = models.URLField()
+    cover = models.ImageField(upload_to='imgs/covers/', default=None)
 
     def count_recent_views(self):
         daysAgo = timezone.now() - timedelta(days=30)

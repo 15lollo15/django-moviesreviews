@@ -1,3 +1,4 @@
+
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponse
@@ -136,6 +137,8 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
     template_name = 'users/profileDetails.html'
 
     def formatWatchtime(watchtime):
+        if watchtime == None:
+            return "0 m"
         if watchtime < 60:
             return str(watchtime) + " m"
         h = watchtime // 60

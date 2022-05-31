@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from moviesreviews.settings import STATIC_URL
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -6,7 +7,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
-    profile_img_path = models.URLField(default=('imgs/profiles_imgs/default.jpg'))
+    profile_img = models.ImageField(upload_to='imgs/profileImgs/', default=None)
     bio = models.TextField()
     friends = models.ManyToManyField(to='UserProfile', symmetrical=False)
     watch_list = models.ManyToManyField(to=Movie, related_name='in_watchlist')

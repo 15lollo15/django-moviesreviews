@@ -86,7 +86,7 @@
                             <span style="font-weight:bold">{{m.title}}</span>
                         </p>
                     </div>
-                    <img class="card-img homepage-card-img" src="{% static m.cover_path %}"/>
+                    <img class="card-img homepage-card-img" src="{{m.cover.url}}"/>
                     </a>
                     <div class="card-footer">
                         {% if m.stars != None %}

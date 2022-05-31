@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.core.files import File
 
 from movies.models import Movie
 from users.models import UserProfile
@@ -26,6 +27,7 @@ class CreateProfileForm(UserCreationForm):
         profile = UserProfile()
         profile.user = user
         profile.bio = self.cleaned_data['bio']
+        profile.profile_img.save("default.jpg", File(open("media/imgs/profileImgs/default.jpg", "rb")))
         if self.cleaned_data['public_or_private'] == 'public':
             profile.is_user_page_public = True
         else:
