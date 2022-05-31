@@ -19,7 +19,7 @@
                 </div>
             {% endif %}
             <h1>{{object.user.username}}</h1>
-            <img src="{{object.profile_img.url}}" class="rounded-circle border m-2" style="height: 10em"/>
+            <img src="{{object.profile_img.url}}" class="rounded-circle border m-2" style="height: 10em; width: 10em; object-fit:cover"/>
             <br>
             <p class="text-muted">{{object.bio}}</p>
             {% if object.user.pk == user.pk %}

@@ -106,7 +106,7 @@
           
           {% for r in  reviews%}
           <div class="media border p-2">
-            <img src="{{r.owner.profile_img.url}}" alt="{{r.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+            <img src="{{r.owner.profile_img.url}}" alt="{{r.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:60px; height:60px; object-fit:cover">
             <div class="media-body">
               <span>
                 {% for s in r.stars %}
@@ -133,7 +133,7 @@
               </span>
               {% for c in  r.comments.all %}
                 <div class="media p-3">
-                  <img src="{{c.owner.profile_img.url}}" alt="{{c.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:45px;">
+                  <img src="{{c.owner.profile_img.url}}" alt="{{c.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:45px; width:45px; object-fit:cover">
                   <div class="media-body">
                     <h4>{{c.owner.user.username}} <small><i>{{c.date}}</i></small></h4>
                     <p>{{c.body}}</p>
