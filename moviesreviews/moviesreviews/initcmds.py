@@ -111,8 +111,20 @@ review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche t
                 ('2022-05-10', 'SunnyPanda', "Halloween", 'Ok', 3),]
 
 def init_users():
+    admin = User.objects.filter(username = "admin").first()
+    if not hasattr(admin, 'profile'):
+        profile = UserProfile()
+        profile.user = admin
+        profile.bio = ""
+        profile.profile_img.save('default.jpg', File(open("static/imgs/profiles_imgs/default.jpg", "rb")))
+        watchlist = []
+        profile.watch_list.set(watchlist)
+        profile.is_user_page_public = p[3]
+        profile.save()
+
     if len(User.objects.all()) != 0:
         return
+
 
     for u in users:
         user = User()
