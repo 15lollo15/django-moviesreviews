@@ -18,5 +18,5 @@ urlpatterns = [
     path('addremovefriend/', addRemoveFriend, name="addremovefriend"),
     path('addwatch/', addWatch, name="addwatch"),
     path('friends/<pk>/', FriendsPage.as_view(), name="friends"),
-    path('updateProfile/<pk>/', UpdateUserProfile.as_view(), name="updateprofile")
+    path('updateProfile', UpdateUserProfile.as_view(), name="updateprofile")
 ]

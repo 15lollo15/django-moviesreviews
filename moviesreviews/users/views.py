@@ -220,6 +220,9 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
     model = UserProfile
     fields = ['profile_img', 'bio']
     template_name = 'users/updateUser.html'
+
+    def get_object(self):
+        return self.request.user.profile
     
     def get_success_url(self):
         return reverse('users:profile_details', args=[self.object.pk]) + "?updated=true"
