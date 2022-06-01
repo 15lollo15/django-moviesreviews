@@ -23,7 +23,7 @@
             <br>
             <p class="text-muted">{{object.bio}}</p>
             {% if object.user.pk == user.pk %}
-                <button class="btn btn-info m-2">Modifica profilo</button>
+                <a class="btn btn-info m-2" href="{% url 'users:updateprofile' object.pk %}">Modifica profilo</a>
             {% else %}
                 <form method="POST" action="{% url 'users:addremovefriend' %}">
                     {% csrf_token %}

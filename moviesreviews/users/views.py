@@ -1,4 +1,6 @@
 
+from tkinter.tix import Form
+import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponse
@@ -6,8 +8,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import HiddenInput, ModelForm, TextInput, Select
+from django.forms import Form, HiddenInput, ModelForm, TextInput, Select
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from movies.models import Genre, Movie
 from django.db.models import Count, Sum
 from datetime import datetime
@@ -211,3 +214,12 @@ def addWatch(request):
 class FriendsPage(LoginRequiredMixin,DetailView):
     model = UserProfile
     template_name = 'users/friendsPage.html'
+
+
+class UpdateUserProfile(LoginRequiredMixin, UpdateView):
+    model = UserProfile
+    fields = ['profile_img', 'bio']
+    template_name = 'users/updateUser.html'
+    
+    def get_success_url(self):
+        return reverse('users:profile_details', args=[self.object.pk]) + "?updated=true"
