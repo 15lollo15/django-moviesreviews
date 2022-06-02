@@ -1,10 +1,16 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from braces.views import GroupRequiredMixin
+from django.utils import timezone, dateformat
+from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 
 from movies.models import Genre, Movie, Person
 from users.models import Review
@@ -123,3 +129,23 @@ class DeleteMovie(GroupRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('home') + "?deletedMovie=true"
+
+
+class CreateMovieForm(forms.ModelForm):
+    class Meta:
+        model = Movie
+        fields = ['added_date', 'title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
+        widgets = {
+            'added_date' : forms.HiddenInput(attrs={"value":dateformat.format(timezone.now(), 'd/m/Y')})
+        }
+
+
+class CreateMovie(GroupRequiredMixin, CreateView):
+    group_required = ['Editor']
+    model = Movie
+    #fields = ['added_date', 'title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
+    form_class = CreateMovieForm
+    template_name = 'movies/updateMovie.html'
+
+    def get_success_url(self):
+        return reverse('home') + "?createMovie=true"
