@@ -1,4 +1,5 @@
 from cProfile import label
+from email.headerregistry import Group
 from urllib import request
 from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
@@ -6,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.core.files import File
+from django.contrib.auth.models import Group
 
 from movies.models import Movie
 from users.models import UserProfile
@@ -25,10 +27,11 @@ class CreateProfileForm(UserCreationForm):
 
     def save(self, commit= True):
         user = super().save(commit)
+        user.groups.add(Group.objects.get(name="BaseUser"))
         profile = UserProfile()
         profile.user = user
         profile.bio = self.cleaned_data['bio']
-        print(self.cleaned_data)
+
         tmp_img = self.cleaned_data["profile_img"]
         if tmp_img == None:
             profile.profile_img.save("default.jpg", File(open("media/imgs/profileImgs/default.jpg", "rb")))

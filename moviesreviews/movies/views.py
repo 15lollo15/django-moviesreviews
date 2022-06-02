@@ -1,6 +1,10 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView, DeleteView
+from braces.views import GroupRequiredMixin
 
 from movies.models import Genre, Movie, Person
 from users.models import Review
@@ -104,4 +108,18 @@ class SearchView(ListView):
         context["title"] = self.request.GET.get('title', "")
         return context
     
+class UpdateMovie(GroupRequiredMixin, UpdateView):
+    group_required = ['Editor']
+    model = Movie
+    fields = ['title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
+    template_name = 'movies/updateMovie.html'
 
+    def get_success_url(self):
+        return reverse('movies:moviedetails', args=[self.object.pk]) + "?updated=true"
+
+class DeleteMovie(GroupRequiredMixin, DeleteView):
+    group_required = ['Editor']
+    model = Movie
+
+    def get_success_url(self):
+        return reverse('home') + "?deletedMovie=true"

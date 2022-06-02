@@ -1,7 +1,9 @@
 from movies.models import Genre, Movie, Person
 from users.models import Review, UserProfile, Watch, Comment
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.files import File
+from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 
 genres = ['giallo', 'horror', 'fantasy', 'animazione']
 directors = [('1973-12-17','Rian Johnson'),
@@ -112,7 +114,7 @@ review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche t
 
 def init_users():
     admin = User.objects.filter(username = "admin").first()
-    if not hasattr(admin, 'profile'):
+    if admin != None and not hasattr(admin, 'profile'):
         profile = UserProfile()
         profile.user = admin
         profile.bio = ""
@@ -195,5 +197,20 @@ def init_db():
     init_movies()
     init_users()
 
+def init_groups():
+    editors, created = Group.objects.get_or_create(name='Editor')
+    baseUsers, created = Group.objects.get_or_create(name='BaseUser')
+    content_type = ContentType.objects.get_for_model(Movie)
+    post_permission = Permission.objects.filter(content_type=content_type)
+    for perm in post_permission:
+        if perm.codename == 'delete_movie':
+            editors.permissions.add(perm)
+        elif perm.codename == 'change_movie':
+            editors.permissions.add(perm)
+        elif perm.codename == 'add_movie':
+            editors.permissions.add(perm)
+        elif perm.codename == 'view_movie':
+            editors.permissions.add(perm)
+            baseUsers.permissions.add(perm)
 
     

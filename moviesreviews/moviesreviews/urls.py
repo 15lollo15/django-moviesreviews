@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from moviesreviews import settings
 
-from moviesreviews.initcmds import erase_db, init_db
+from moviesreviews.initcmds import erase_db, init_db, init_groups
 from .views import UserCreateView, home
 from movies.views import *
 
@@ -39,3 +39,4 @@ if settings.DEBUG:
 
 #erase_db()
 init_db()
+init_groups()

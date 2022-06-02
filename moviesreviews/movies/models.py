@@ -62,5 +62,12 @@ class Person(models.Model):
     def is_an_actor(self):
         return len(self.movies_as_actor.all()) > 0
 
+    def __str__(self):
+        return self.name_surname + " (" + str(self.birthday) + ")"
+    
+
 class Genre(models.Model):
     name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name

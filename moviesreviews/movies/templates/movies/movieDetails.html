@@ -33,6 +33,10 @@
                   </div>
                 {% endif %}
             {% endif %}
+            {% if user.is_authenticated and user.profile.is_editor%}
+              <a class="btn btn-warning" href="{% url 'movies:updatemovie' object.pk %}">Modifica</a>
+              <a class="btn btn-danger" href="{% url 'movies:deletemovie' object.pk %}">Elimina</a>
+            {% endif %}
             <h3>{{ object.release_year }}</h3>
             <h1>{{ object.title }}</h1>
             <p class="text-muted">Durata: {{object.duration}} min</p>

@@ -3,6 +3,7 @@ from django.db import models
 from moviesreviews.settings import STATIC_URL
 from django.core.validators import MaxValueValidator, MinValueValidator
 from movies.models import Movie
+from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
@@ -24,6 +25,10 @@ class UserProfile(models.Model):
     
     def count_notMyFriends(self):
         return len(self.notMyFriends())
+
+    def is_editor(self):
+        editorGroup = Group.objects.filter(name="Editor").first()
+        return editorGroup in self.user.groups.all() or self.user.is_superuser
 
 
 class Watch(models.Model):
