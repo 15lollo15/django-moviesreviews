@@ -18,6 +18,17 @@
                     {% endif %}
                 </div>
             {% endif %}
+            {% if user.is_superuser %}
+                <form method="POST" action="{% url 'users:upgradedowngrade' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="user-pk" value="{{object.user.pk}}">
+                    {% if object.is_editor %}
+                        <button type="submit" class="btn btn-warning">Declassa a utente base</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success">Promuovi ad editore</button>
+                    {% endif %}
+                </form>
+            {% endif %}
             <h1>{{object.user.username}}</h1>
             <img src="{{object.profile_img.url}}" class="rounded-circle border m-2" style="height: 10em; width: 10em; object-fit:cover"/>
             <br>

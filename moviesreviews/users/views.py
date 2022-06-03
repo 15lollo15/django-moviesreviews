@@ -7,7 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import Http404, HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import Form, HiddenInput, ModelForm, TextInput, Select
@@ -252,4 +252,20 @@ class SearchProfile(LoginRequiredMixin, ListView):
             return UserProfile.objects.all()
         users = User.objects.filter(username__icontains = username).all()
         return UserProfile.objects.filter(user__in = users)
-        
+
+@login_required        
+def updateOrDowngrade(request):
+    if not request.user.is_superuser:
+        return redirect(reverse("home"))
+    
+    user_pk = request.POST.get("user-pk", None)
+    user = get_object_or_404(User, pk = user_pk)
+
+    editor_group = Group.objects.filter(name = "Editor").first()
+
+    if editor_group in user.groups.all():
+        user.groups.remove(editor_group)
+    else:
+        user.groups.add(editor_group)
+    
+    return redirect(reverse("users:profile_details", args=[user.profile.pk]))
