@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import Form, HiddenInput, ModelForm, TextInput, Select
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
 from movies.models import Genre, Movie
 from django.db.models import Count, Sum
 from datetime import datetime
@@ -240,3 +241,15 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         return reverse('users:profile_details', args=[self.object.pk]) + "?updated=true"
+
+class SearchProfile(LoginRequiredMixin, ListView):
+    model = UserProfile
+    template_name = 'users/search.html'
+
+    def get_queryset(self):
+        username = self.request.GET.get('username', None)
+        if username == None:
+            return UserProfile.objects.all()
+        users = User.objects.filter(username__icontains = username).all()
+        return UserProfile.objects.filter(user__in = users)
+        

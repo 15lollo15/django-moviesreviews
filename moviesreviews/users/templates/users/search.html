@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <center>
+        <h1>Ricerca utenti</h1>
+        <form method="GET">
+            <input type="text" name="username" id="username" placeholder="Username">
+            <button type="submit" class="btn btn-primary">cerca</button>
+        </form>
+        {% for user in object_list %}
+            <p>{{user.user.username}}</p>
+        {% endfor %}
+    </center>
+{% endblock content %}

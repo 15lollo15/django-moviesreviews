@@ -42,7 +42,7 @@
                 {% endif %}
             </h1>
             {% if object == user.profile %}
-                <button class="btn btn-info">Cerca nuovi amici</button>
+                <a class="btn btn-info" href="{% url 'users:search_profile' %}">Cerca nuovi amici</a>
             {% endif %}
             {% if object.count_friends == 0%}
                 <div class="alert alert-info alert-dismissible fade show m-3">

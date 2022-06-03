@@ -18,5 +18,6 @@ urlpatterns = [
     path('addremovefriend/', addRemoveFriend, name="addremovefriend"),
     path('addwatch/', addWatch, name="addwatch"),
     path('friends/<pk>/', FriendsPage.as_view(), name="friends"),
-    path('updateProfile', UpdateUserProfile.as_view(), name="updateprofile")
+    path('updateProfile', UpdateUserProfile.as_view(), name="updateprofile"),
+    path('search/', SearchProfile.as_view(), name="search_profile")
 ]
