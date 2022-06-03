@@ -1,9 +1,11 @@
 
+from ast import Return
 from tkinter.tix import Form
+from webbrowser import get
 import django
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -15,6 +17,7 @@ from movies.models import Genre, Movie
 from django.db.models import Count, Sum
 from datetime import datetime
 import datetime
+from django.core.exceptions import PermissionDenied
 
 
 from users.models import Comment, Review, UserProfile, Watch
@@ -183,7 +186,7 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
         user = get_object_or_404(User, pk = self.request.user.pk)
         profile = get_object_or_404(UserProfile, user = user)
 
-        if profile not in profileOwner.friends.all():
+        if profile != profileOwner and profile not in profileOwner.friends.all():
             context['can_show'] = False
 
         return context
@@ -215,10 +218,21 @@ class FriendsPage(LoginRequiredMixin,DetailView):
     model = UserProfile
     template_name = 'users/friendsPage.html'
 
+    def get(self, request, *args, **kwargs):
+        response = super(FriendsPage, self).get(request, *args, **kwargs)
+        obj = self.object
+        user = get_object_or_404(User, pk = self.request.user.pk)
+        profile = get_object_or_404(UserProfile, user = user) 
+        if obj != profile and not obj.is_user_page_public and profile not in obj.friends.all():
+            return redirect(reverse("users:profile_details", args=[obj.pk]))
+
+        return response
+    
+
 
 class UpdateUserProfile(LoginRequiredMixin, UpdateView):
     model = UserProfile
-    fields = ['profile_img', 'bio']
+    fields = ['profile_img', 'bio', 'is_user_page_public']
     template_name = 'users/updateUser.html'
 
     def get_object(self):
