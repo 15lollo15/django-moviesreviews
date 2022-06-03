@@ -16,7 +16,6 @@ class Movie(models.Model):
     def count_recent_views(self):
         daysAgo = timezone.now() - timedelta(days=30)
         n = len(self.views.filter(date__gt = daysAgo))
-        print(n)
         return n
 
     def count_views(self):
