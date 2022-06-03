@@ -43,7 +43,7 @@ class MovieDetails(DetailView):
         context["reviews"] = reviews
         return context
 
-class SearchView(ListView):
+class SearchMovie(ListView):
     model = Movie
     template_name = 'movies/search.html'
 
