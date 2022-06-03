@@ -1,33 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <center>
-        <h1>Ricerca utenti</h1>
-        <form method="GET">
-            <input type="text" name="username" id="username" placeholder="Username">
-            <button type="submit" class="btn btn-primary">cerca</button>
-        </form>
-        {% if object_list|length == 0 %}
-            <div class="alert alert-warning alert-dismissible fade show m-3">
-                Nessun utente trovato
-            </div>
-        {% else %}
-            <table class="table m-3">
-                <tbody>
-                    {% for user in object_list %}
-                        <tr  class="d-flex">
-                            <td class="align-middle col-2">
-                                <img class="rounded-circle border" style="height:4em; width:4em; object-fit:cover" src="{{user.profile_img.url}}"/>
-                            </td>
-                            <td class="align-middle col-10">
-                                <a href="{% url 'users:profile_details' user.pk %}"><h3>{{user.user.username}}</h3></a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-
-        
-    </center>
+    <div class="container">
+        <center>
+            <h1>Ricerca utenti</h1>
+            <form method="GET">
+                <input type="text" name="username" id="username" placeholder="Username" value="{{request.GET.username}}">
+                <button type="submit" class="btn btn-primary">cerca</button>
+            </form>
+            {% if object_list|length == 0 %}
+                <div class="alert alert-warning alert-dismissible fade show m-3">
+                    Nessun utente trovato
+                </div>
+            {% else %}
+                <table class="table m-3">
+                    <tbody>
+                        {% for user in object_list %}
+                            <tr  class="d-flex">
+                                <td class="align-middle col-2">
+                                    <img class="rounded-circle border" style="height:4em; width:4em; object-fit:cover" src="{{user.profile_img.url}}"/>
+                                </td>
+                                <td class="align-middle col-10">
+                                    <a href="{% url 'users:profile_details' user.pk %}"><h3>{{user.user.username}}</h3></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}        
+        </center>
+    </div>
 {% endblock content %}
