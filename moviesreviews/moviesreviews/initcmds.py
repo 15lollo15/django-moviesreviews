@@ -23,6 +23,30 @@ def erase_db():
     Genre.objects.all().delete()
     User.objects.all().delete()
 
+
+def create_dummies_movies(N):
+    for n in range(N):
+        create_movie('2019-05-10', 2015 + (n % 3), 'movie' + str(n), 90, 
+        'Plot', 
+        'default.jpg',
+        genres[n % len(genres)],
+        directors[n % len(directors)],
+        actors[n % len(actors)])
+
+def create_movie(addedDate, releaseYear, title, duration, plot, cover, genre, director, cast):
+    movie1 = Movie()
+    movie1.added_date = addedDate
+    movie1.release_year = releaseYear
+    movie1.title = title
+    movie1.duration = duration
+    movie1.plot = plot
+    movie1.cover.save(cover, File(open("static/imgs/movies_covers/"+cover, "rb")))
+    movie1.save()
+    movie1.genre.set([Genre.objects.filter(name=genre).first()])
+    movie1.directors.set([Person.objects.filter(name_surname=director).first()])
+    movie1.cast.set([Person.objects.filter(name_surname=cast).first()])
+    movie1.save()
+
 def init_movies():
     if len(Movie.objects.all()) != 0 or len(Person.objects.all()) != 0 or len(Genre.objects.all()) != 0:
         return
@@ -44,57 +68,36 @@ def init_movies():
         actor.name_surname = a[1]
         actor.save()
 
-    movie1 = Movie()
-    movie1.added_date = '2022-05-10'
-    movie1.release_year = 2019
-    movie1.title = 'Cena con delitto'
-    movie1.duration = 130
-    movie1.plot = 'Un investigatore e un soldato si recano in una lussureggiante tenuta per interrogare gli eccentrici parenti di un patriarca morto durante le celebrazioni del suo ottantacinquesimo compleanno.'
-    movie1.cover.save("0.jpg", File(open("static/imgs/movies_covers/0.jpg", "rb")))
-    movie1.save()
-    movie1.genre.set([Genre.objects.filter(name='giallo').first()])
-    movie1.directors.set([Person.objects.filter(name_surname='Rian Johnson').first()])
-    movie1.cast.set([Person.objects.filter(name_surname='Ana de Armas').first()])
-    movie1.save()
+    create_movie('2022-05-10', 2019, 'Cena con delitto', 130, 
+    'Un investigatore e un soldato si recano in una lussureggiante tenuta per interrogare gli eccentrici parenti di un patriarca morto durante le celebrazioni del suo ottantacinquesimo compleanno.', 
+    '0.jpg',
+    'giallo',
+    'Rian Johnson',
+    'Ana de Armas')
 
-    movie1 = Movie()
-    movie1.added_date = '2022-05-09'
-    movie1.release_year = 1979
-    movie1.title = 'Halloween'
-    movie1.duration = 91
-    movie1.plot = "Un criminale già condannato per l'omicidio della sorella scappa di prigione e torna nella città natale in cerca della prossima vittima durante la notte di Halloween del 1978."
-    movie1.cover.save("1.jpg", File(open("static/imgs/movies_covers/1.jpg", "rb")))
-    movie1.save()
-    movie1.genre.set([Genre.objects.filter(name='horror').first()])
-    movie1.directors.set([Person.objects.filter(name_surname='John Carpenter').first()])
-    movie1.cast.set([Person.objects.filter(name_surname='Jamie Lee Curtis').first()])
-    movie1.save()
-    
-    movie1 = Movie()
-    movie1.added_date = '2022-05-08'
-    movie1.release_year = 2019
-    movie1.title = "Il signore degli anelli: La compagnia dell'anello"
-    movie1.duration = 178
-    movie1.plot = "Un giovane hobbit e un variegato gruppo, composto da umani, un nano, un elfo e altri hobbit, partono per un delicata missione, guidati dal potente mago Gandalf. Devono distruggere un anello magico e sconfiggere il malvagio Sauron."
-    movie1.cover.save("2.jpg", File(open("static/imgs/movies_covers/2.jpg", "rb")))
-    movie1.save()
-    movie1.genre.set([Genre.objects.filter(name='fantasy').first()])
-    movie1.directors.set([Person.objects.filter(name_surname='Peter Jackson').first()])
-    movie1.cast.set([Person.objects.filter(name_surname='Elijah Wood').first()])
-    movie1.save()
+    create_movie('2022-05-09', 1979, 'Halloween', 91, 
+    "Un criminale già condannato per l'omicidio della sorella scappa di prigione e torna nella città natale in cerca della prossima vittima durante la notte di Halloween del 1978.", 
+    '1.jpg',
+    'horror',
+    'John Carpenter',
+    'Jamie Lee Curtis')
 
-    movie1 = Movie()
-    movie1.added_date = '2022-05-07'
-    movie1.release_year = 2012
-    movie1.title = "Le 5 leggende"
-    movie1.duration = 97
-    movie1.plot = "La storia di un gruppo di eroi ben noti ai bambini, tra i quali Babbo Natale, il Coniglio Pasquale e la Fatina dei Denti, ognuno dotato di poteri straordinari, che devono unire le loro forze per proteggere le speranze dei bambini di tutto il mondo."
-    movie1.cover.save("4.jpg", File(open("static/imgs/movies_covers/4.jpg", "rb")))
-    movie1.save()
-    movie1.genre.set([Genre.objects.filter(name='animazione').first(), Genre.objects.filter(name='fantasy').first()])
-    movie1.directors.set([Person.objects.filter(name_surname='Peter Ramsey').first()])
-    movie1.cast.set([Person.objects.filter(name_surname='Hugh Jackman').first()])
-    movie1.save()
+    create_movie('2022-05-08', 2019, "Il signore degli anelli: La compagnia dell'anello", 178, 
+    "Un giovane hobbit e un variegato gruppo, composto da umani, un nano, un elfo e altri hobbit, partono per un delicata missione, guidati dal potente mago Gandalf. Devono distruggere un anello magico e sconfiggere il malvagio Sauron.", 
+    '2.jpg',
+    'fantasy',
+    'Peter Jackson',
+    'Jamie Lee Curtis')
+
+    create_movie('2022-05-07', 2012, "Le 5 leggende", 97, 
+    "La storia di un gruppo di eroi ben noti ai bambini, tra i quali Babbo Natale, il Coniglio Pasquale e la Fatina dei Denti, ognuno dotato di poteri straordinari, che devono unire le loro forze per proteggere le speranze dei bambini di tutto il mondo.", 
+    '4.jpg',
+    'animazione',
+    'Peter Ramsey',
+    'Hugh Jackman')
+
+    create_dummies_movies(50)
+
 
 users = [("Polylemma", "Polylemma"), ("Cheesecake", "Cheesecake"), ("SunnyPanda", "SunnyPanda")]
 profiles = [('I am Polylemma', ["Cheesecake"], ["Cena con delitto", "Le 5 leggende"], False),

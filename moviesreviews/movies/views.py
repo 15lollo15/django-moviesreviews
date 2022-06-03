@@ -46,6 +46,7 @@ class MovieDetails(DetailView):
 class SearchMovie(ListView):
     model = Movie
     template_name = 'movies/search.html'
+    paginate_by = 12
 
     def get_queryset(self):
         movies = Movie.objects.all()
@@ -70,7 +71,7 @@ class SearchMovie(ListView):
 
         movies = movies.order_by("title")
 
-        order_r = self.request.GET.get('order-by', None)
+        order_r = self.request.GET.get('order_by', None)
         if order_r == "title-desc":
             movies = movies.order_by("-title")
         elif order_r == "year-asc":
@@ -108,7 +109,7 @@ class SearchMovie(ListView):
             actor = 0
         context["selected_actor"] = int(actor)
 
-        order_by = self.request.GET.get("order-by")
+        order_by = self.request.GET.get("order_by")
         context["selected_order"] = order_by
 
         context["title"] = self.request.GET.get('title', "")

@@ -55,8 +55,8 @@
                     </select>
                 </div>
                 <div class="form-group" style="margin-right: 1em">
-                    <label for="order-by" class="p-2"> Ordina per</label>
-                    <select name="order-by" id="order-by" class="form-control">
+                    <label for="order_by" class="p-2"> Ordina per</label>
+                    <select name="order_by" id="order_by" class="form-control">
                         <option value="title-asc" {% if selected_order == 'title-asc' %}selected{% endif %}>⬆ Titolo</option>
                         <option value="title-desc" {% if selected_order == 'title-desc' %}selected{% endif %}>⬇ Titolo</option>
                         <option value="year-asc" {% if selected_order == 'year-asc' %}selected{% endif %}>⬆ Anno uscita</option>
@@ -102,6 +102,37 @@
                 </div>   
             </div>     
         {% endfor %}
+        {% if is_paginated %}
+            <div class="justify-content-center m-3" style="width:100%">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <form method="GET">
+                            <input type="hidden" name="title" value="{{request.GET.title}}"/>
+                            <input type="hidden" name="director" value="{{request.GET.director}}"/>
+                            <input type="hidden" name="genre" value="{{request.GET.genre}}"/>
+                            <input type="hidden" name="actor" value="{{request.GET.actor}}"/>
+                            <input type="hidden" name="order_by" value="{{request.GET.order_by}}"/>
+                            <input type="hidden" name="page" value="{{page_obj.previous_page_number}}"/>
+                            <button type="submit" class="btn btn-info">Precedente</button>
+                        </form>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                    <form method="GET">
+                        <input type="hidden" name="title" value="{{request.GET.title}}"/>
+                        <input type="hidden" name="director" value="{{request.GET.director}}"/>
+                        <input type="hidden" name="genre" value="{{request.GET.genre}}"/>
+                        <input type="hidden" name="actor" value="{{request.GET.actor}}"/>
+                        <input type="hidden" name="order_by" value="{{request.GET.order_by}}"/>
+                        <input type="hidden" name="page" value="{{page_obj.next_page_number}}"/>
+                        <button type="submit" class="btn btn-info">Successiva</button>
+                    </form>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
         </div>
     <center>
 {% endblock content %}
