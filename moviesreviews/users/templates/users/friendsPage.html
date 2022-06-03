@@ -35,8 +35,15 @@
             </table>
         {% endif %}
         <center>
-            <h1>Amici</h1>
-            <button class="btn btn-info">Cerca nuovi amici</button>
+            <h1>
+                Amici
+                {% if object != user.profile %}
+                    di "{{object.user.username}}"
+                {% endif %}
+            </h1>
+            {% if object == user.profile %}
+                <button class="btn btn-info">Cerca nuovi amici</button>
+            {% endif %}
             {% if object.count_friends == 0%}
                 <div class="alert alert-info alert-dismissible fade show m-3">
                     Non hai ancora amici
@@ -57,12 +64,14 @@
                             </a>
                         </td>
                         <td class="align-middle text-right">
-                            <form method="POST" action="{% url 'users:addremovefriend' %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="profile-pk" value="{{friend.pk}}"/>
-                                <input type="hidden" name="to-friends" value="true" />
-                                <button class="btn btn-danger" type="submit" >Rimuovi amicizia</button>
-                            </form>
+                            {% if object == user.profile %}
+                                <form method="POST" action="{% url 'users:addremovefriend' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="profile-pk" value="{{friend.pk}}"/>
+                                    <input type="hidden" name="to-friends" value="true" />
+                                    <button class="btn btn-danger" type="submit" >Rimuovi amicizia</button>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
