@@ -1,6 +1,7 @@
 from cProfile import label
 from email.headerregistry import Group
 from urllib import request
+from django import views
 from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
@@ -8,9 +9,16 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.core.files import File
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 
 from movies.models import Movie
 from users.models import UserProfile
+
+def suggested_movies(user):
+    users = UserProfile.objects.all()
+    most_similar = sorted(users, key = (lambda u : u.similarity(user)))[0]
+    watched_movies = Movie.objects.filter(views__in = most_similar.watched.all()).exclude(views__in = user.watched.all());
+    return sorted(watched_movies.distinct(), key=(lambda m : m.scoreBy(most_similar)))[:4]
 
 # Create your views here.
 def home(request):
@@ -18,6 +26,11 @@ def home(request):
     trend_movies = Movie.objects.all()
     trend_movies = sorted(trend_movies, key=(lambda m  : m.count_recent_views()), reverse=True)
     ctx = {'last_added' : last_added_movies, 'trend_movies' : trend_movies[:4]}
+    sm = 0
+    if request.user.is_authenticated:
+        sm = suggested_movies(request.user.profile)
+
+    ctx["suggested_movies"] = sm
     return render(request, template_name='home.html', context=ctx)
 
 class CreateProfileForm(UserCreationForm):

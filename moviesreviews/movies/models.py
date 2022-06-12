@@ -13,6 +13,12 @@ class Movie(models.Model):
     genre = models.ManyToManyField(to='Genre', related_name='movies')
     cover = models.ImageField(upload_to='imgs/covers/', default=None)
 
+    def scoreBy(self, user):
+        review = self.reviews.filter(owner = user).first()
+        if review == None:
+            return 0
+        return review.rating
+
     def count_recent_views(self):
         daysAgo = timezone.now() - timedelta(days=30)
         n = len(self.views.filter(date__gt = daysAgo))

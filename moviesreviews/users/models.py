@@ -1,5 +1,7 @@
 from email.policy import default
+from django import views
 from django.db import models
+from django.shortcuts import get_object_or_404
 from moviesreviews.settings import STATIC_URL
 from django.core.validators import MaxValueValidator, MinValueValidator
 from movies.models import Movie
@@ -29,6 +31,26 @@ class UserProfile(models.Model):
     def is_editor(self):
         editorGroup = Group.objects.filter(name="Editor").first()
         return editorGroup in self.user.groups.all() or self.user.is_superuser
+
+    def similarity(self, otherProfile):
+        movies_in_common = Movie.objects.filter(views__in = self.watched.all()).filter(views__in = otherProfile.watched.all())
+        movies_in_common = movies_in_common.distinct()
+
+        sum = 0
+        for movie in movies_in_common.all():
+            my_review = self.reviews.filter(movie = movie).first()
+            my_score = 0
+            if my_review != None:
+                my_score = my_review.rating
+
+            other_review = otherProfile.reviews.filter(movie = movie).first()
+            other_score  = 0
+            if other_review != None:
+                other_score = other_review.rating
+
+            sum = sum + (4-abs(my_score - other_score))
+
+        return sum
 
 
 class Watch(models.Model):

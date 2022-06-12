@@ -8,6 +8,9 @@
 
 {% block content %}
     <center>
+        {% for movie in suggested_movies %}
+            {{movie.title}}
+        {% endfor %}
         <div style="width:70%">
             {% if 'login' in request.GET%}
                 <div class="alert alert-success alert-dismissible fade show">
