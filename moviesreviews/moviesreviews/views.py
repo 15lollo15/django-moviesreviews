@@ -16,9 +16,19 @@ from users.models import UserProfile
 
 def suggested_movies(user):
     users = UserProfile.objects.all()
-    most_similar = sorted(users, key = (lambda u : u.similarity(user)))[0]
-    watched_movies = Movie.objects.filter(views__in = most_similar.watched.all()).exclude(views__in = user.watched.all());
-    return sorted(watched_movies.distinct(), key=(lambda m : m.scoreBy(most_similar)))[:4]
+    most_similars = sorted(users, key = (lambda u : u.similarity(user)))
+
+    suggested_movies = set()
+
+    for otherUser in most_similars:
+        watched_movies = Movie.objects.filter(views__in = otherUser.watched.all()).exclude(views__in = user.watched.all())
+        for m in watched_movies:
+            suggested_movies.add(m)
+        if len(suggested_movies) >= 4:
+            break
+
+    
+    return sorted(suggested_movies, key=(lambda m : m.count_stars()), reverse=True)[:4]
 
 # Create your views here.
 def home(request):
@@ -29,6 +39,8 @@ def home(request):
     sm = 0
     if request.user.is_authenticated:
         sm = suggested_movies(request.user.profile)
+
+    print(sm)
 
     ctx["suggested_movies"] = sm
     return render(request, template_name='home.html', context=ctx)
