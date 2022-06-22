@@ -1,4 +1,5 @@
 from email.policy import default
+from math import sqrt
 from django import views
 from django.db import models
 from django.shortcuts import get_object_or_404
@@ -33,24 +34,25 @@ class UserProfile(models.Model):
         return editorGroup in self.user.groups.all() or self.user.is_superuser
 
     def similarity(self, otherProfile):
-        movies_in_common = Movie.objects.filter(views__in = self.watched.all()).filter(views__in = otherProfile.watched.all())
-        movies_in_common = movies_in_common.distinct()
-
+        movies_in_common = Movie.objects.filter(reviews__in = self.reviews.all()).filter(reviews__in = otherProfile.reviews.all())
+        
+        if len(movies_in_common) == 0:
+            return -1
+        
         sum = 0
-        for movie in movies_in_common.all():
-            my_review = self.reviews.filter(movie = movie).first()
-            my_score = 0
-            if my_review != None:
-                my_score = my_review.rating
+        my_sqrt_sum = 0
+        other_sqrt_sum = 0
+        for movie in movies_in_common:
+            my_review = Review.objects.filter(owner = self).filter(movie = movie).first()
+            other_review = Review.objects.filter(owner = otherProfile).filter(movie = movie).first()
+            sum += my_review.rating * other_review.rating
 
-            other_review = otherProfile.reviews.filter(movie = movie).first()
-            other_score  = 0
-            if other_review != None:
-                other_score = other_review.rating
+            my_sqrt_sum += my_review.rating * my_review.rating
+            other_sqrt_sum += other_review.rating * other_review.rating
 
-            sum = sum + (4-abs(my_score - other_score))
-
-        return sum
+        s = sum / (sqrt(my_sqrt_sum) * sqrt(other_sqrt_sum))
+        print(str(self) + " " + str(otherProfile) + " " + str(s))
+        return s
 
 
 class Watch(models.Model):

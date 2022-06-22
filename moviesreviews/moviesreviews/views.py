@@ -21,7 +21,8 @@ def suggested_movies(user):
     suggested_movies = set()
 
     for otherUser in most_similars:
-        watched_movies = Movie.objects.filter(views__in = otherUser.watched.all()).exclude(views__in = user.watched.all())
+        watched_movies = Movie.objects.filter(reviews__in = otherUser.reviews.all())
+        print(watched_movies)
         for m in watched_movies:
             suggested_movies.add(m)
         if len(suggested_movies) >= 4:
