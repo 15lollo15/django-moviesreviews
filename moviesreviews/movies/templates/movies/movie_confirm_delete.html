@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <form method="POST">
         {% csrf_token %}
         <p>Sei sicuro di voler cancellare {{object.title}} ?</p>
-        {{ form }}
-        <input type="submit" value="Confirm">
+        {{ form | crispy}}
+        <input class="btn btn-danger" type="submit" value="Confirm">
     </form>
 {% endblock content %}

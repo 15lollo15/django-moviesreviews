@@ -1,3 +1,4 @@
+from dataclasses import fields
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -122,6 +123,12 @@ class UpdateMovie(GroupRequiredMixin, UpdateView):
     fields = ['title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
     template_name = 'movies/updateMovie.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Modifica film" 
+        return context
+    
+
     def get_success_url(self):
         return reverse('movies:moviedetails', args=[self.object.pk]) + "?updated=true"
 
@@ -145,9 +152,53 @@ class CreateMovieForm(forms.ModelForm):
 class CreateMovie(GroupRequiredMixin, CreateView):
     group_required = ['Editor']
     model = Movie
-    #fields = ['added_date', 'title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
     form_class = CreateMovieForm
     template_name = 'movies/updateMovie.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tilte"] = "Nuovo film"
+        return context
+    
+
     def get_success_url(self):
         return reverse('home') + "?createMovie=true"
+
+class CreatePersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = '__all__'
+        widgets = {
+            'birthday' : forms.DateInput(attrs={'type': 'date'})
+        }
+
+class CreatePerson(GroupRequiredMixin, CreateView):
+    group_required = ['Editor']
+    model = Person
+    form_class = CreatePersonForm
+    template_name = 'movies/updateMovie.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Nuovo attore/regista'
+        return context
+
+    def get_success_url(self):
+        return reverse('home') + "?createActorDirector=true"
+
+
+class CreateGenre(GroupRequiredMixin, CreateView):
+    group_required = ['Editor']
+    model = Genre
+    fields = '__all__'
+    template_name = 'movies/updateMovie.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Nuovo genere'
+        return context
+
+    def get_success_url(self):
+        return reverse('home') + "?createGenre=true"
+    
+    
