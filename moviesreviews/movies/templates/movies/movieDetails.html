@@ -134,16 +134,22 @@
                   <button class="btn btn-warning" onclick="modificaToggler()">Modifica</button>
                   <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#areyousuremodal">Elimina</button>
                 {% endif %}
+                <button id="comment-toggler-{{r.pk}}"class="btn btn-info" onclick="showHideCommentForm({{r.pk}})">Aggiungi commento</button>
+                {% if r.comments.all|length > 0 %}
+                  <br><button id="comments-toggler-{{r.pk}}" class="btn" onclick="showHideComments({{r.pk}})">➕ Mostra commenti</button>
+                {% endif %}
               </span>
-              {% for c in  r.comments.all %}
-                <div class="media p-3">
-                  <img src="{{c.owner.profile_img.url}}" alt="{{c.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:45px; width:45px; object-fit:cover">
-                  <div class="media-body">
-                    <h4>{{c.owner.user.username}} <small><i>{{c.date}}</i></small></h4>
-                    <p>{{c.body}}</p>
-                  </div>
-                </div>  
-              {% endfor %}
+              <span id="comments-{{r.pk}}" hidden>
+                {% for c in  r.comments.all %}
+                  <div class="media p-3">
+                    <img src="{{c.owner.profile_img.url}}" alt="{{c.owner.user.username}}" class="mr-3 mt-3 rounded-circle" style="width:45px; width:45px; object-fit:cover">
+                    <div class="media-body">
+                      <h4>{{c.owner.user.username}} <small><i>{{c.date}}</i></small></h4>
+                      <p>{{c.body}}</p>
+                    </div>
+                  </div>  
+                {% endfor %}
+              </span>
               <form id="comment-form-{{r.pk}}" method="POST" action="{% url 'users:new_comment' %}" hidden>
                 {% csrf_token %}
                 <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
@@ -151,7 +157,6 @@
                 {{comment_form | crispy}}
                 <button class="btn btn-success" type='submit'>Invia Commento</button>
               </form>
-              <button id="comment-toggler-{{r.pk}}"class="btn btn-info" onclick="showHide({{r.pk}})">Aggiungi commento</button>
             </div>
           </div><br>
           {% endfor %}
@@ -218,7 +223,7 @@
         xhttp.send();
       }
 
-      function showHide(reviewId) {
+      function showHideCommentForm(reviewId) {
         let form = document.getElementById("comment-form-" + reviewId)
         if (form.hidden) {
           form.hidden = false
@@ -226,6 +231,17 @@
         } else {
           form.hidden = true
           document.getElementById("comment-toggler-" + reviewId).innerHTML = "Aggiungi commento"
+        }
+      }
+
+      function showHideComments(reviewId) {
+        let reviewSpan = document.getElementById("comments-" + reviewId)
+        if (reviewSpan.hidden) {
+          reviewSpan.hidden = false
+          document.getElementById("comments-toggler-" + reviewId).innerHTML = "➖ Nascondi"
+        } else {
+          reviewSpan.hidden = true
+          document.getElementById("comments-toggler-" + reviewId).innerHTML = "➕ Mostra commenti"
         }
       }
 
