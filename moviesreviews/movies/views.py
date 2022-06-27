@@ -14,7 +14,7 @@ from crispy_forms.layout import Submit
 
 from movies.models import Genre, Movie, Person
 from users.models import Review
-from users.views import ReviewForm
+from users.views import CommentForm, ReviewForm
 
 class MovieDetails(DetailView):
     model = Movie
@@ -22,7 +22,8 @@ class MovieDetails(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ReviewForm()
+        context["review_form"] = ReviewForm()
+        context["comment_form"] = CommentForm()
         context["user_review"] = None
         context["is_in_user_watchlist"] = False
 

@@ -1,4 +1,3 @@
-
 from ast import Return
 from tkinter.tix import Form
 from webbrowser import get
@@ -70,6 +69,28 @@ def newReview(request):
             review.body = form.cleaned_data['body']
             review.save()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']
+
+@login_required
+def newComment(request):
+    user = get_object_or_404(User, username=request.user)
+    review = get_object_or_404(Review, pk = request.POST["review-pk"])
+    moviePK = request.POST["movie-pk"]
+    form = CommentForm(request.POST)
+    if (form.is_valid()):
+        comment = Comment()
+        comment.owner = user.profile
+        comment.review = review
+        comment.body = form.cleaned_data["body"]
+        comment.date = timezone.now()
+        comment.save()
+    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+
+
 
 @login_required
 def addToWatchlist(request):

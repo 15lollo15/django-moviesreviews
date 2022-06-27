@@ -96,14 +96,14 @@
             <form id="review-form" method="POST" action="{% url 'users:new_review' %}" hidden>
               {% csrf_token %}
               <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
-              {{form | crispy}}
+              {{review_form | crispy}}
               <button class="btn btn-success" type='submit'>Invia recensione</button>
             </form>
           {% else %}
             <form id="review-form" method="POST" action="{% url 'users:new_review' %}">
               {% csrf_token %}
               <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
-              {{form | crispy}}
+              {{review_form | crispy}}
               <button class="btn btn-success" type='submit'>Invia recensione</button>
             </form>
           {% endif %}
@@ -144,6 +144,14 @@
                   </div>
                 </div>  
               {% endfor %}
+              <form id="comment-form-{{r.pk}}" method="POST" action="{% url 'users:new_comment' %}" hidden>
+                {% csrf_token %}
+                <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
+                <input name="review-pk" id="review-pk" type="hidden" value="{{r.pk}}"/>
+                {{comment_form | crispy}}
+                <button class="btn btn-success" type='submit'>Invia Commento</button>
+              </form>
+              <button id="comment-toggler-{{r.pk}}"class="btn btn-info" onclick="showHide({{r.pk}})">Aggiungi commento</button>
             </div>
           </div><br>
           {% endfor %}
@@ -208,6 +216,17 @@
         }
         xhttp.open("GET", "/users/addtowatchlist/?movie-pk={{object.pk}}");
         xhttp.send();
+      }
+
+      function showHide(reviewId) {
+        let form = document.getElementById("comment-form-" + reviewId)
+        if (form.hidden) {
+          form.hidden = false
+          document.getElementById("comment-toggler-" + reviewId).innerHTML = "Nascondi"
+        } else {
+          form.hidden = true
+          document.getElementById("comment-toggler-" + reviewId).innerHTML = "Aggiungi commento"
+        }
       }
 
     </script>
