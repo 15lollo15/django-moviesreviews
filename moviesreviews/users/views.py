@@ -50,6 +50,7 @@ class ReviewForm(ModelForm):
 def newReview(request):
     user = get_object_or_404(User, username=request.user)
     form = ReviewForm(request.POST)
+    update = False
     if (form.is_valid()):
         moviePK = request.POST.get("movie-pk")
         movie = get_object_or_404(Movie, pk = moviePK)
@@ -60,6 +61,7 @@ def newReview(request):
             r.body = form.cleaned_data['body']
             r.rating = int(form.cleaned_data['rating'])
             r.save()
+            update = True
         else:
             review = Review()
             review.owner = user.profile
@@ -68,7 +70,12 @@ def newReview(request):
             review.date = timezone.now()
             review.body = form.cleaned_data['body']
             review.save()
-    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    if update:
+        response["Location"] += "?reviewUpdated=true"
+    else:
+        response["Location"] += "?reviewAdded=true"
+    return response
 
 class CommentForm(ModelForm):
     class Meta:
@@ -88,7 +95,9 @@ def newComment(request):
         comment.body = form.cleaned_data["body"]
         comment.date = timezone.now()
         comment.save()
-    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response["Location"] += "?commentAdded=true"
+    return response
 
 @login_required
 def deleteComment(request):
@@ -97,7 +106,9 @@ def deleteComment(request):
     moviePK = request.POST["movie-pk"]
     if (user.profile == comment.owner):
         comment.delete()
-    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response["Location"] += "?commentDeleted=true"
+    return response
 
 @login_required
 def addToWatchlist(request):
@@ -120,7 +131,9 @@ def deleteReview(request):
     movie = get_object_or_404(Movie, pk = moviePK)
     review = get_object_or_404(Review, owner = user.profile, movie = movie)
     review.delete()
-    return redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response["Location"] += "?reviewDeleted=true"
+    return response
 
 @login_required
 def removeFromWatchlist(request):

@@ -33,6 +33,37 @@
                   </div>
                 {% endif %}
             {% endif %}
+            {% if 'commentAdded' in request.GET%}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Commento aggiunto con successo!!
+              </div>
+            {% endif %}
+            {% if 'commentDeleted' in request.GET%}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Commento rimosso con successo!!
+              </div>
+            {% endif %}
+            {% if 'reviewAdded' in request.GET%}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Recensione aggiunta con successo!!
+              </div>
+            {% endif %}
+            {% if 'reviewUpdated' in request.GET%}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Recensione modificato con successo!!
+              </div>
+            {% endif %}
+            {% if 'reviewDeleted' in request.GET%}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Recensione eliminata con successo!!
+              </div>
+            {% endif %}
+            
             {% if user.is_authenticated and user.profile.is_editor%}
               <a class="btn btn-warning" href="{% url 'movies:updatemovie' object.pk %}">Modifica</a>
               <a class="btn btn-danger" href="{% url 'movies:deletemovie' object.pk %}">Elimina</a>
@@ -99,6 +130,7 @@
               {{review_form | crispy}}
               <button class="btn btn-success" type='submit'>Invia recensione</button>
             </form>
+            <br>
           {% else %}
             <form id="review-form" method="POST" action="{% url 'users:new_review' %}">
               {% csrf_token %}
@@ -106,6 +138,7 @@
               {{review_form | crispy}}
               <button class="btn btn-success" type='submit'>Invia recensione</button>
             </form>
+            <br>
           {% endif %}
           
           {% for r in  reviews%}
