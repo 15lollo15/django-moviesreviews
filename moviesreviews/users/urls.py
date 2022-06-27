@@ -11,6 +11,7 @@ app_name = 'users'
 urlpatterns = [
     path('like/', like, name="like"),
     path('newcomment/', newComment, name="new_comment"),
+    path('deletecomment/', deleteComment, name="delete_comment"),
     path('newreview/', newReview, name="new_review"),
     path('deletereview/', deleteReview, name="delete_review"),
     path('details/<pk>/', ProfileDetails.as_view(), name="profile_details"),

@@ -147,6 +147,14 @@
                       <h4>{{c.owner.user.username}} <small><i>{{c.date}}</i></small></h4>
                       <p>{{c.body}}</p>
                     </div>
+                    {% if c.owner == user.profile %}
+                      <form method="POST" action="{% url 'users:delete_comment'%}">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment-pk" value="{{c.pk}}"/>
+                        <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
+                        <button type="submit" class="btn btn-danger">Rimuovi</button>
+                      </form>
+                    {% endif %}
                   </div>  
                 {% endfor %}
               </span>

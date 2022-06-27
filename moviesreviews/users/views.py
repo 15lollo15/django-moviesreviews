@@ -90,7 +90,14 @@ def newComment(request):
         comment.save()
     return redirect(reverse('movies:moviedetails', args=[moviePK]))
 
-
+@login_required
+def deleteComment(request):
+    user = get_object_or_404(User, username=request.user)
+    comment = get_object_or_404(Comment, pk = request.POST["comment-pk"])
+    moviePK = request.POST["movie-pk"]
+    if (user.profile == comment.owner):
+        comment.delete()
+    return redirect(reverse('movies:moviedetails', args=[moviePK]))
 
 @login_required
 def addToWatchlist(request):
