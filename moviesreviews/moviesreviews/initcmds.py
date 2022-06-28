@@ -33,10 +33,10 @@ def create_dummies_movies(N):
         directors[n % len(directors)],
         actors[n % len(actors)])
 
-def create_movie(addedDate, releaseYear, title, duration, plot, cover, genre, director, cast):
+def create_movie(added_date, release_year, title, duration, plot, cover, genre, director, cast):
     movie1 = Movie()
-    movie1.added_date = addedDate
-    movie1.release_year = releaseYear
+    movie1.added_date = added_date
+    movie1.release_year = release_year
     movie1.title = title
     movie1.duration = duration
     movie1.plot = plot
@@ -202,7 +202,7 @@ def init_db():
 
 def init_groups():
     editors, created = Group.objects.get_or_create(name='Editor')
-    baseUsers, created = Group.objects.get_or_create(name='BaseUser')
+    base_users, created = Group.objects.get_or_create(name='BaseUser')
     content_type = ContentType.objects.get_for_model(Movie)
     post_permission = Permission.objects.filter(content_type=content_type)
     for perm in post_permission:
@@ -214,6 +214,6 @@ def init_groups():
             editors.permissions.add(perm)
         elif perm.codename == 'view_movie':
             editors.permissions.add(perm)
-            baseUsers.permissions.add(perm)
+            base_users.permissions.add(perm)
 
     

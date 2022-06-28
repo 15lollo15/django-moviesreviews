@@ -1,9 +1,5 @@
-from email.policy import default
 from math import sqrt
-from django import views
 from django.db import models
-from django.shortcuts import get_object_or_404
-from moviesreviews.settings import STATIC_URL
 from django.core.validators import MaxValueValidator, MinValueValidator
 from movies.models import Movie
 from django.contrib.auth.models import Group
@@ -17,41 +13,32 @@ class UserProfile(models.Model):
     watch_list = models.ManyToManyField(to=Movie, related_name='in_watchlist')
     is_user_page_public = models.BooleanField(default=True)
 
-    def count_watchlist(self):
-        return len(self.watch_list.all())
-
     def notMyFriends(self):
         return UserProfile.objects.filter(friends = self).exclude(pk__in = self.friends.all())
-    
-    def count_friends(self):
-        return len(self.friends.all())
-    
-    def count_notMyFriends(self):
-        return len(self.notMyFriends())
 
     def is_editor(self):
-        editorGroup = Group.objects.filter(name="Editor").first()
-        return editorGroup in self.user.groups.all() or self.user.is_superuser
+        editor_group = Group.objects.filter(name="Editor").first()
+        return editor_group in self.user.groups.all() or self.user.is_superuser
 
-    def similarity(self, otherProfile):
-        movies_in_common = Movie.objects.filter(reviews__in = self.reviews.all()).filter(reviews__in = otherProfile.reviews.all())
+    def similarity(self, other_profile):
+        movies_in_common = Movie.objects.filter(reviews__in = self.reviews.all()).filter(reviews__in = other_profile.reviews.all())
         
         if len(movies_in_common) == 0:
             return -1
         
-        sum = 0
+        rating_sum = 0
         my_sqrt_sum = 0
         other_sqrt_sum = 0
         for movie in movies_in_common:
             my_review = Review.objects.filter(owner = self).filter(movie = movie).first()
-            other_review = Review.objects.filter(owner = otherProfile).filter(movie = movie).first()
-            sum += my_review.rating * other_review.rating
+            other_review = Review.objects.filter(owner = other_profile).filter(movie = movie).first()
+            rating_sum += my_review.rating * other_review.rating
 
             my_sqrt_sum += my_review.rating * my_review.rating
             other_sqrt_sum += other_review.rating * other_review.rating
 
-        s = sum / (sqrt(my_sqrt_sum) * sqrt(other_sqrt_sum))
-        print(str(self) + " " + str(otherProfile) + " " + str(s))
+        s = rating_sum / (sqrt(my_sqrt_sum) * sqrt(other_sqrt_sum))
+        print(str(self) + " " + str(other_profile) + " " + str(s))
         return s
 
 

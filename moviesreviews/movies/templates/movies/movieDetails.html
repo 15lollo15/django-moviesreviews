@@ -86,7 +86,7 @@
                     Aggiungi alla watchlist
                   {% endif %}
               </button>
-              <p>{{object.count_views}} 👁</p>
+              <p>{{object.views|length}} 👁</p>
               <form method="POST" action="{% url 'users:addwatch' %}">
                 {% csrf_token %}
                 <input name="movie-pk" id="movie-pk" type="hidden" value="{{object.pk}}"/>
@@ -155,7 +155,7 @@
               <h4><a href="{% url 'users:profile_details' r.owner.pk%}">{{r.owner.user.username}}</a><small><i>{{r.date}}</i></small></h4>
               <p>{{r.body}}</p>
               <span>
-                <span id="like-{{r.pk}}">{{r.count_likes}}</span> 
+                <span id="like-{{r.pk}}">{{r.likes.all|length}}</span> 
                 <button class="btn btn-info" onclick="like({{r.pk}})">
                   {% if user.profile in r.likes.all %}
                     <img id="like-button-{{r.pk}}" src="{% static 'icons/thumbs-fill.svg'%}">

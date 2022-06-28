@@ -1,15 +1,11 @@
-from ast import Return
-from tkinter.tix import Form
-from webbrowser import get
-import django
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.utils import timezone
-from django.http import Http404, HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import Form, HiddenInput, ModelForm, TextInput, Select
+from django.forms import ModelForm, Select
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
@@ -17,7 +13,6 @@ from movies.models import Genre, Movie
 from django.db.models import Count, Sum
 from datetime import datetime
 import datetime
-from django.core.exceptions import PermissionDenied
 
 
 from users.models import Comment, Review, UserProfile, Watch
@@ -47,13 +42,13 @@ class ReviewForm(ModelForm):
         }
 
 @login_required
-def newReview(request):
+def new_review(request):
     user = get_object_or_404(User, username=request.user)
     form = ReviewForm(request.POST)
     update = False
     if (form.is_valid()):
-        moviePK = request.POST.get("movie-pk")
-        movie = get_object_or_404(Movie, pk = moviePK)
+        movie_pk = request.POST.get("movie-pk")
+        movie = get_object_or_404(Movie, pk = movie_pk)
         reviews = Review.objects.filter(owner = user.profile, movie = movie)
         if len(reviews) > 0:
             r = reviews.first()
@@ -70,7 +65,7 @@ def newReview(request):
             review.date = timezone.now()
             review.body = form.cleaned_data['body']
             review.save()
-    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[movie_pk]))
     if update:
         response["Location"] += "?reviewUpdated=true"
     else:
@@ -83,10 +78,10 @@ class CommentForm(ModelForm):
         fields = ['body']
 
 @login_required
-def newComment(request):
+def new_comment(request):
     user = get_object_or_404(User, username=request.user)
     review = get_object_or_404(Review, pk = request.POST["review-pk"])
-    moviePK = request.POST["movie-pk"]
+    movie_pk = request.POST["movie-pk"]
     form = CommentForm(request.POST)
     if (form.is_valid()):
         comment = Comment()
@@ -95,26 +90,26 @@ def newComment(request):
         comment.body = form.cleaned_data["body"]
         comment.date = timezone.now()
         comment.save()
-    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[movie_pk]))
     response["Location"] += "?commentAdded=true"
     return response
 
 @login_required
-def deleteComment(request):
+def delete_comment(request):
     user = get_object_or_404(User, username=request.user)
     comment = get_object_or_404(Comment, pk = request.POST["comment-pk"])
-    moviePK = request.POST["movie-pk"]
+    movie_pk = request.POST["movie-pk"]
     if (user.profile == comment.owner):
         comment.delete()
-    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[movie_pk]))
     response["Location"] += "?commentDeleted=true"
     return response
 
 @login_required
-def addToWatchlist(request):
+def add_to_watchlist(request):
     user = get_object_or_404(User, username=request.user)
-    moviePK = request.GET.get("movie-pk")
-    movie = get_object_or_404(Movie, pk = moviePK)
+    movie_pk = request.GET.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = movie_pk)
     r_text = "added"
     if movie in user.profile.watch_list.all():
         user.profile.watch_list.remove(movie)
@@ -125,21 +120,21 @@ def addToWatchlist(request):
     return HttpResponse(r_text)
 
 @login_required
-def deleteReview(request):
+def delete_review(request):
     user = get_object_or_404(User, username=request.user)
-    moviePK = request.POST.get("movie-pk")
-    movie = get_object_or_404(Movie, pk = moviePK)
+    movie_pk = request.POST.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = movie_pk)
     review = get_object_or_404(Review, owner = user.profile, movie = movie)
     review.delete()
-    response = redirect(reverse('movies:moviedetails', args=[moviePK]))
+    response = redirect(reverse('movies:moviedetails', args=[movie_pk]))
     response["Location"] += "?reviewDeleted=true"
     return response
 
 @login_required
-def removeFromWatchlist(request):
+def remove_from_watchlist(request):
     user = get_object_or_404(User, username=request.user)
-    moviePK = request.POST.get("movie-pk")
-    movie = get_object_or_404(Movie, pk = moviePK)
+    movie_pk = request.POST.get("movie-pk")
+    movie = get_object_or_404(Movie, pk = movie_pk)
     is_viewed = request.POST.get("is-viewed", None)
     if is_viewed == None:
         is_viewed = False
@@ -157,25 +152,25 @@ def removeFromWatchlist(request):
     return redirect(reverse('users:profile_details', args=[user.profile.pk]))
 
 @login_required
-def addRemoveFriend(request):
-    myUser = get_object_or_404(User, pk = request.user.pk)
-    myProfile = get_object_or_404(UserProfile, user = myUser)
+def add_remove_friend(request):
+    my_user = get_object_or_404(User, pk = request.user.pk)
+    my_profile = get_object_or_404(UserProfile, user = my_user)
 
-    otherProfile = get_object_or_404(UserProfile, pk = request.POST.get('profile-pk', None))
+    other_profile = get_object_or_404(UserProfile, pk = request.POST.get('profile-pk', None))
 
-    if myProfile == otherProfile:
-        return redirect(reverse('users:profile_details', args=[otherProfile.pk]))
+    if my_profile == other_profile:
+        return redirect(reverse('users:profile_details', args=[other_profile.pk]))
 
     action = "added"
-    if otherProfile in myProfile.friends.all():
-        myProfile.friends.remove(otherProfile)
+    if other_profile in my_profile.friends.all():
+        my_profile.friends.remove(other_profile)
         action = "removed"
     else:
-        myProfile.friends.add(otherProfile)
+        my_profile.friends.add(other_profile)
 
     if (request.POST.get('to-friends', None) != None):
-        return redirect(reverse('users:friends', args=[myProfile.pk]))
-    response = redirect(reverse('users:profile_details', args=[otherProfile.pk]))
+        return redirect(reverse('users:friends', args=[my_profile.pk]))
+    response = redirect(reverse('users:profile_details', args=[other_profile.pk]))
     response["Location"] += '?action=' + action
     return response
 
@@ -195,20 +190,20 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profileOwner = context["object"]
+        profile_owner = context["object"]
         context['can_show'] = True
         context['favourite_movie'] = None
         context['favourite_genre'] = None
         context['watchtime'] = None
 
         # Favourite movie
-        watches = Watch.objects.filter(user=profileOwner).values("movie").annotate(mcount = Count("movie")).order_by("-mcount")
+        watches = Watch.objects.filter(user=profile_owner).values("movie").annotate(mcount = Count("movie")).order_by("-mcount")
         if len(watches.all()) > 0:
             w = watches.all().first()
             context['favourite_movie'] = get_object_or_404(Movie, pk = w["movie"])
 
         # Favourite genre
-        watches = Watch.objects.filter(user=profileOwner).values("movie")
+        watches = Watch.objects.filter(user=profile_owner).values("movie")
         movies = Movie.objects.filter(pk__in = watches).values("genre").annotate(gcount = Count("genre")).order_by("-gcount")
         if len(movies.all()) > 0:
             m = movies.all().first()
@@ -216,19 +211,19 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
         
         
         # Watch time
-        watches = Watch.objects.filter(user=profileOwner).filter(date__gt = (timezone.now() - datetime.timedelta(days=30))).values("movie")
+        watches = Watch.objects.filter(user=profile_owner).filter(date__gt = (timezone.now() - datetime.timedelta(days=30))).values("movie")
         movies = Movie.objects.filter(pk__in = watches).aggregate(Sum('duration'))
         if len(movies) > 0:
             context['watchtime'] = ProfileDetails.formatWatchtime(movies["duration__sum"])
         
 
-        if profileOwner.is_user_page_public:
+        if profile_owner.is_user_page_public:
             return context
 
         user = get_object_or_404(User, pk = self.request.user.pk)
         profile = get_object_or_404(UserProfile, user = user)
 
-        if profile != profileOwner and profile not in profileOwner.friends.all():
+        if profile != profile_owner and profile not in profile_owner.friends.all():
             context['can_show'] = False
 
         return context
@@ -236,19 +231,19 @@ class ProfileDetails(LoginRequiredMixin,DetailView):
 
 
 @login_required    
-def addWatch(request):
+def add_watch(request):
     movie_pk = request.POST.get('movie-pk', None)
     if movie_pk == "":
         movie_pk = None
     movie = get_object_or_404(Movie, pk = movie_pk)
     profile = request.user.profile
-    dateS = request.POST.get('watchdate', None)
+    date_s = request.POST.get('watchdate', None)
     status = 'failed'
-    if dateS != None:
+    if date_s != None:
         watch = Watch()
         watch.user = profile
         watch.movie = movie
-        watch.date = dateS
+        watch.date = date_s
         watch.save()
         status = 'ok'
 
@@ -295,7 +290,7 @@ class SearchProfile(LoginRequiredMixin, ListView):
         return UserProfile.objects.filter(user__in = users)
 
 @login_required        
-def updateOrDowngrade(request):
+def upgrade_or_downgrade(request):
     if not request.user.is_superuser:
         return redirect(reverse("home"))
     

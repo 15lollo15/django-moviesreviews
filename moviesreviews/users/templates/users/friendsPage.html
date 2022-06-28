@@ -7,7 +7,7 @@
 
 {% block content %}
     <div class="container">
-        {% if object.count_notMyFriends %}
+        {% if object.notMyFriends.all|length %}
             <center><h1>Amicizie non reciproche</h1></center>
             <table class="table">
                 <tbody>
@@ -44,7 +44,7 @@
             {% if object == user.profile %}
                 <a class="btn btn-info" href="{% url 'users:search_profile' %}">Cerca nuovi amici</a>
             {% endif %}
-            {% if object.count_friends == 0%}
+            {% if object.friends.all|length == 0%}
                 <div class="alert alert-info alert-dismissible fade show m-3">
                     Non hai ancora amici
                 </div>

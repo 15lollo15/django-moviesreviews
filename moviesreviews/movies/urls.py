@@ -1,6 +1,6 @@
 from django.urls import path
 
-from movies.views import *
+from movies.views import MovieDetails, CreatePerson, CreateGenre, SearchMovie, UpdateMovie, DeleteMovie, CreateMovie
 
 app_name = 'movies'
 

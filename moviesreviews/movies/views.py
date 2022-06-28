@@ -1,16 +1,10 @@
-from dataclasses import fields
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from braces.views import GroupRequiredMixin
 from django.utils import timezone, dateformat
 from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 
 
 from movies.models import Genre, Movie, Person
@@ -87,8 +81,7 @@ class SearchMovie(ListView):
         elif order_r == "last-added":
             movies = movies.order_by("added_date")
         elif order_r == "trand":
-            #TODO
-            pass
+            movies = sorted(movies, key=(lambda m : m.count_recent_views()), reverse=True)
 
         return movies
     

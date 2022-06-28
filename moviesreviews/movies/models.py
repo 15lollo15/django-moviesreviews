@@ -20,8 +20,8 @@ class Movie(models.Model):
         return review.rating
 
     def count_recent_views(self):
-        daysAgo = timezone.now() - timedelta(days=30)
-        n = len(self.views.filter(date__gt = daysAgo))
+        days_ago = timezone.now() - timedelta(days=30)
+        n = len(self.views.filter(date__gt = days_ago))
         return n
 
     def count_views(self):

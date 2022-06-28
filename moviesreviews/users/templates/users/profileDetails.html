@@ -104,7 +104,7 @@
 
                 <br>
                 <h2>Watchlist</h2>
-                {% if object.count_watchlist == 0%}
+                {% if object.watch_list.all|length == 0%}
                     <div class="alert alert-info alert-dismissible fade show m-3">
                         Non hai film nella watchlist
                     </div>

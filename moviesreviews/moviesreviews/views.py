@@ -1,7 +1,4 @@
-from cProfile import label
 from email.headerregistry import Group
-from urllib import request
-from django import views
 from django.forms import CharField, ChoiceField, ImageField, Textarea
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
@@ -9,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.core.files import File
 from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
 
 from movies.models import Movie
 from users.models import UserProfile
@@ -20,8 +16,8 @@ def suggested_movies(user):
 
     suggested_movies = set()
 
-    for otherUser in most_similars:
-        watched_movies = Movie.objects.filter(reviews__in = otherUser.reviews.all())
+    for other_user in most_similars:
+        watched_movies = Movie.objects.filter(reviews__in = other_user.reviews.all())
         print(watched_movies)
         for m in watched_movies:
             suggested_movies.add(m)
