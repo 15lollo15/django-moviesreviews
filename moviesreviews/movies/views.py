@@ -6,10 +6,10 @@ from braces.views import GroupRequiredMixin
 from django.utils import timezone, dateformat
 from django import forms
 
-
 from movies.models import Genre, Movie, Person
 from users.models import Review
 from users.views import CommentForm, ReviewForm
+
 
 class MovieDetails(DetailView):
     model = Movie
@@ -22,7 +22,6 @@ class MovieDetails(DetailView):
         context["user_review"] = None
         context["is_in_user_watchlist"] = False
 
-
         movie = context["object"]
 
         if self.request.user.is_authenticated:
@@ -30,7 +29,7 @@ class MovieDetails(DetailView):
 
         reviews = movie.ordered_reviews()
         if self.request.user.is_authenticated:
-            rs = Review.objects.filter(owner = self.request.user.profile, movie = movie)
+            rs = Review.objects.filter(owner=self.request.user.profile, movie=movie)
             if len(rs) > 0:
                 reviews.remove(rs.first())
                 reviews.insert(0, rs.first())
@@ -38,6 +37,7 @@ class MovieDetails(DetailView):
 
         context["reviews"] = reviews
         return context
+
 
 class SearchMovie(ListView):
     model = Movie
@@ -48,22 +48,22 @@ class SearchMovie(ListView):
         movies = Movie.objects.all()
         title = self.request.GET.get('title', None)
         if title != None:
-            movies = movies.filter(title__icontains = title)
-        
+            movies = movies.filter(title__icontains=title)
+
         genre_r = self.request.GET.get('genre', None)
         if genre_r != None and genre_r != "":
             genre = Genre.objects.filter(pk=genre_r)
-            movies = movies.filter(genre__in= genre)
+            movies = movies.filter(genre__in=genre)
 
         directors_r = self.request.GET.get('director', None)
         if directors_r != None and directors_r != "":
             directors = Person.objects.filter(pk=directors_r)
-            movies = movies.filter(directors__in= directors)
-        
+            movies = movies.filter(directors__in=directors)
+
         actors_r = self.request.GET.get('actor', None)
         if actors_r != None and actors_r != "":
             actors = Person.objects.filter(pk=actors_r)
-            movies = movies.filter(cast__in= actors)
+            movies = movies.filter(cast__in=actors)
 
         movies = movies.order_by("title")
 
@@ -75,16 +75,16 @@ class SearchMovie(ListView):
         elif order_r == "year-desc":
             movies = movies.order_by("-release_year")
         elif order_r == "rating-asc":
-            movies = sorted(movies, key=(lambda m : m.count_stars()))
+            movies = sorted(movies, key=(lambda m: m.count_stars()))
         elif order_r == "rating-desc":
-            movies = sorted(movies, key=(lambda m : m.count_stars()), reverse=True)
+            movies = sorted(movies, key=(lambda m: m.count_stars()), reverse=True)
         elif order_r == "last-added":
             movies = movies.order_by("added_date")
         elif order_r == "trand":
-            movies = sorted(movies, key=(lambda m : m.count_recent_views()), reverse=True)
+            movies = sorted(movies, key=(lambda m: m.count_recent_views()), reverse=True)
 
         return movies
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["genres"] = Genre.objects.all()
@@ -109,7 +109,8 @@ class SearchMovie(ListView):
 
         context["title"] = self.request.GET.get('title', "")
         return context
-    
+
+
 class UpdateMovie(GroupRequiredMixin, UpdateView):
     group_required = ['Editor']
     model = Movie
@@ -118,12 +119,12 @@ class UpdateMovie(GroupRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Modifica film" 
+        context["title"] = "Modifica film"
         return context
-    
 
     def get_success_url(self):
         return reverse('movies:moviedetails', args=[self.object.pk]) + "?updated=true"
+
 
 class DeleteMovie(GroupRequiredMixin, DeleteView):
     group_required = ['Editor']
@@ -138,7 +139,7 @@ class CreateMovieForm(forms.ModelForm):
         model = Movie
         fields = ['added_date', 'title', 'release_year', 'duration', 'directors', 'cast', 'plot', 'genre', 'cover']
         widgets = {
-            'added_date' : forms.HiddenInput(attrs={"value":dateformat.format(timezone.now(), 'd/m/Y')})
+            'added_date': forms.HiddenInput(attrs={"value": dateformat.format(timezone.now(), 'd/m/Y')})
         }
 
 
@@ -152,18 +153,19 @@ class CreateMovie(GroupRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["tilte"] = "Nuovo film"
         return context
-    
 
     def get_success_url(self):
         return reverse('home') + "?createMovie=true"
+
 
 class CreatePersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = '__all__'
         widgets = {
-            'birthday' : forms.DateInput(attrs={'type': 'date'})
+            'birthday': forms.DateInput(attrs={'type': 'date'})
         }
+
 
 class CreatePerson(GroupRequiredMixin, CreateView):
     group_required = ['Editor']
@@ -193,5 +195,3 @@ class CreateGenre(GroupRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('home') + "?createGenre=true"
-    
-    
