@@ -118,18 +118,20 @@
                                 </td>
                                 <td class="align-middle"><strong>{{m.title}}</strong></td>
                                 <td class="align-middle">
-                                    <form method="POST" class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
-                                        <input type="hidden" name="is-viewed" value="True"/>
-                                        <button type="submit" class="btn btn-success">Visto</button>
-                                    </form>
-                                    <form method="POST"  class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
-                                        <input type="hidden" name="is-viewed" value="False"/>
-                                        <button type="submit" class="btn btn-secondary">Rimuovi</button>
-                                    </form>
+                                    {% if user.profile == object %}
+                                        <form method="POST" class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
+                                            <input type="hidden" name="is-viewed" value="True"/>
+                                            <button type="submit" class="btn btn-success">Visto</button>
+                                        </form>
+                                        <form method="POST"  class="form-inline" style="display:inline-block" action="{% url 'users:removefromwatchlist'%}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="movie-pk" value="{{m.pk}}"/>
+                                            <input type="hidden" name="is-viewed" value="False"/>
+                                            <button type="submit" class="btn btn-secondary">Rimuovi</button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
