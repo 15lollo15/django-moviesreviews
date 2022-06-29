@@ -25,26 +25,14 @@ class Movie(models.Model):
         n = len(self.views.filter(date__gt=days_ago))
         return n
 
-    def count_views(self):
-        return len(self.views.all())
-
-    def count_stars(self):
-        stars = self.stars()
-        if stars is None:
-            return 0
-        return len(stars)
-
     def stars(self):
         reviews = self.reviews.all()
         if len(reviews) == 0:
-            return None
+            return []
         tot = 0
         for r in reviews:
             tot += r.rating
         return range(int(tot / len(reviews)))
-
-    def count_reviews(self):
-        return len(self.reviews.all())
 
     def users_that_reviewed(self):
         users = []
@@ -55,7 +43,7 @@ class Movie(models.Model):
 
     def ordered_reviews(self):
         reviews = self.reviews.all()
-        return sorted(reviews, key=(lambda r: r.count_likes()), reverse=True)
+        return sorted(reviews, key=(lambda r: len(r.likes.all())), reverse=True)
 
 
 class Person(models.Model):
