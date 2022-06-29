@@ -18,11 +18,11 @@
                     {% endif %}
                 </div>
             {% endif %}
-            {% if user.is_superuser %}
+            {% if user.is_superuser and object != user.profile%}
                 <form method="POST" action="{% url 'users:upgradedowngrade' %}">
                     {% csrf_token %}
                     <input type="hidden" name="user-pk" value="{{object.user.pk}}">
-                    {% if object.is_editor %}
+                    {% if object.is_editor%}
                         <button type="submit" class="btn btn-warning">Declassa a utente base</button>
                     {% else %}
                         <button type="submit" class="btn btn-success">Promuovi ad editore</button>

@@ -297,6 +297,9 @@ def upgrade_or_downgrade(request):
     user_pk = request.POST.get("user-pk", None)
     user = get_object_or_404(User, pk = user_pk)
 
+    if user.is_superuser:
+        return redirect(reverse("home"))
+
     editor_group = Group.objects.filter(name = "Editor").first()
 
     if editor_group in user.groups.all():
