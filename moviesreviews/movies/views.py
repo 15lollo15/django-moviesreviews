@@ -75,9 +75,9 @@ class SearchMovie(ListView):
         elif order_r == "year-desc":
             movies = movies.order_by("-release_year")
         elif order_r == "rating-asc":
-            movies = sorted(movies, key=(lambda m: m.count_stars()))
+            movies = sorted(movies, key=(lambda m: len(m.stars())))
         elif order_r == "rating-desc":
-            movies = sorted(movies, key=(lambda m: m.count_stars()), reverse=True)
+            movies = sorted(movies, key=(lambda m: len(m.stars())), reverse=True)
         elif order_r == "last-added":
             movies = movies.order_by("added_date")
         elif order_r == "trand":

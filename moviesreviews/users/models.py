@@ -57,9 +57,6 @@ class Review(models.Model):
 
     def stars(self):
         return range(self.rating)
-    
-    def count_likes(self):
-        return len(self.likes.all())
 
 class Comment(models.Model):
     date = models.DateField()

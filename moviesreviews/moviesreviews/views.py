@@ -25,7 +25,7 @@ def suggested_movies(user):
             break
 
     
-    return sorted(suggested_movies, key=(lambda m : m.count_stars()), reverse=True)[:4]
+    return sorted(suggested_movies, key=(lambda m : len(m.stars())), reverse=True)[:4]
 
 # Create your views here.
 def home(request):
