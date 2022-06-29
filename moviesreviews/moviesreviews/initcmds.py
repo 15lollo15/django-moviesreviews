@@ -117,6 +117,9 @@ review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche t
 
 def init_users():
     admin = User.objects.filter(username = "admin").first()
+    if admin is None:
+        admin = User.objects.create_superuser("admin", "admin@admin.it", "admin")
+        admin.save()
     if admin != None and not hasattr(admin, 'profile'):
         profile = UserProfile()
         profile.user = admin

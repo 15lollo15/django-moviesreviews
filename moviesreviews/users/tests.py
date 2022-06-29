@@ -179,6 +179,13 @@ class ProfileDetailsTest(TestCase):
         admin = User.objects.create_superuser("admin", "admin@admin.it", "admin")
         admin.save()
 
+        admin_profile = UserProfile()
+        admin_profile .user = admin
+        admin_profile .profile_img.save("default.jpg", File(open("media/imgs/profileImgs/default.jpg", "rb")))
+        admin_profile .bio = "admin bio"
+        admin_profile .is_user_page_public = False
+        admin_profile .save()
+
         other = User.objects.create(username='Other')
         other.set_password("OtherPassword")
         other.save()
