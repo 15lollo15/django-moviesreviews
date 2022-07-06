@@ -114,7 +114,9 @@ watch_list = [('2022-05-14', 'Polylemma', 'Halloween'),
 review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche troppo', 3),
                 ('2022-05-12', 'Polylemma', "Le 5 leggende", 'Film fantastico', 5),
                 ('2022-05-14', 'Cheesecake', "Halloween", 'Bello', 4),
-                ('2022-05-10', 'SunnyPanda', "Halloween", 'Ok', 3),]
+                ('2022-05-10', 'SunnyPanda', "Halloween", 'Ok', 3),
+                ('2022-05-10', 'SunnyPanda', "Cena con delitto", 'Non mi è piaciuto', 1),
+                ('2022-05-10', 'SunnyPanda', "Il signore degli anelli: La compagnia dell'anello", 'Mah...', 2)]
 
 def init_users():
     print("Init users")
