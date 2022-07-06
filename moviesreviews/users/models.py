@@ -37,8 +37,6 @@ class UserProfile(models.Model):
             my_sqrt_sum += my_review.rating * my_review.rating
             other_sqrt_sum += other_review.rating * other_review.rating
 
-        s = rating_sum / (sqrt(my_sqrt_sum) * sqrt(other_sqrt_sum))
-        print(str(self) + " " + str(other_profile) + " " + str(s))
         return s
 
 

@@ -48,6 +48,7 @@ def create_movie(added_date, release_year, title, duration, plot, cover, genre, 
     movie1.save()
 
 def init_movies():
+
     if len(Movie.objects.all()) != 0 or len(Person.objects.all()) != 0 or len(Genre.objects.all()) != 0:
         return
     
@@ -116,6 +117,9 @@ review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche t
                 ('2022-05-10', 'SunnyPanda', "Halloween", 'Ok', 3),]
 
 def init_users():
+    if len(User.objects.all()) != 0:
+        return
+    
     admin = User.objects.filter(username = "admin").first()
     if admin is None:
         admin = User.objects.create_superuser("admin", "admin@admin.it", "admin")
@@ -129,10 +133,6 @@ def init_users():
         profile.watch_list.set(watchlist)
         profile.is_user_page_public = p[3]
         profile.save()
-
-    if len(User.objects.all()) != 0:
-        return
-
 
     for u in users:
         user = User()
@@ -200,6 +200,7 @@ def init_users():
 
 def init_db():
     print("Init the DB")
+    init_groups()
     init_movies()
     init_users()
 

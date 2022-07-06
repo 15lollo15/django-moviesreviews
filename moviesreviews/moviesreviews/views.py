@@ -18,7 +18,6 @@ def suggested_movies(user):
 
     for other_user in most_similars:
         watched_movies = Movie.objects.filter(reviews__in = other_user.reviews.all())
-        print(watched_movies)
         for m in watched_movies:
             suggested_movies.add(m)
         if len(suggested_movies) >= 4:
@@ -36,9 +35,6 @@ def home(request):
     sm = 0
     if request.user.is_authenticated:
         sm = suggested_movies(request.user.profile)
-
-    print(sm)
-
     ctx["suggested_movies"] = sm
     return render(request, template_name='home.html', context=ctx)
 
