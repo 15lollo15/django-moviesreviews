@@ -48,7 +48,7 @@ def create_movie(added_date, release_year, title, duration, plot, cover, genre, 
     movie1.save()
 
 def init_movies():
-
+    print("Init movies")
     if len(Movie.objects.all()) != 0 or len(Person.objects.all()) != 0 or len(Genre.objects.all()) != 0:
         return
     
@@ -117,10 +117,12 @@ review_list = [('2022-05-14', 'Polylemma', "Halloween", 'Film bello ma neanche t
                 ('2022-05-10', 'SunnyPanda', "Halloween", 'Ok', 3),]
 
 def init_users():
-    if len(User.objects.all()) != 0:
+    print("Init users")
+    if len(User.objects.all()) > 1:
         return
     
     admin = User.objects.filter(username = "admin").first()
+    
     if admin is None:
         admin = User.objects.create_superuser("admin", "admin@admin.it", "admin")
         admin.save()
@@ -131,7 +133,7 @@ def init_users():
         profile.profile_img.save('default.jpg', File(open("static/imgs/profiles_imgs/default.jpg", "rb")))
         watchlist = []
         profile.watch_list.set(watchlist)
-        profile.is_user_page_public = p[3]
+        profile.is_user_page_public = False
         profile.save()
 
     for u in users:
@@ -205,8 +207,8 @@ def init_db():
     init_users()
 
 def init_groups():
+    print("Init groups")
     editors, created = Group.objects.get_or_create(name='Editor')
-    base_users, created = Group.objects.get_or_create(name='BaseUser')
     content_type = ContentType.objects.get_for_model(Movie)
     post_permission = Permission.objects.filter(content_type=content_type)
     for perm in post_permission:
@@ -218,6 +220,5 @@ def init_groups():
             editors.permissions.add(perm)
         elif perm.codename == 'view_movie':
             editors.permissions.add(perm)
-            base_users.permissions.add(perm)
 
     

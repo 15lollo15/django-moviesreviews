@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from moviesreviews import settings
 
-from moviesreviews.initcmds import erase_db, init_db, init_groups
+from moviesreviews.initcmds import erase_db, init_db
 from .views import UserCreateView, home
 
 urlpatterns = [
@@ -38,6 +38,5 @@ if settings.DEBUG:
 try:
     erase_db()
     init_db()
-    init_groups()
 except:
-    pass
+    print("Error init")
